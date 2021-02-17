@@ -8,7 +8,7 @@ class AddressPage extends StatefulWidget {
 class _AddressPageState extends State<AddressPage> {
   var address = {'Address': []};
   bool showAddress = false;
-  int dateindex = 0;
+  int dateindex;
   var addressSelected;
   bool showBtn = false;
   String _userID = "";
@@ -24,44 +24,38 @@ class _AddressPageState extends State<AddressPage> {
   }
 
   void _query() async {
-
-
     //print('cart');
     final dbHelper = DatabaseHelper.instance;
 
     var allRows = await dbHelper.queryAllRows();
 
     allRows.forEach((row) {
-      items.add(
-
+      items.add({
+        "ItemID": row['id'],
+        "ItemName": row['title'],
+        "Quantity": row['quantity'],
+        "Price": row['price'],
+        "Cost": 0,
+        "StatusID": 1,
+        "OrderDetailModifiers": [
           {
-            "ItemID": row['id'],
-            "ItemName": row['title'],
-            "Quantity": row['quantity'],
-            "Price": row['price'],
+            "ModifierID": 0,
+            "ModifierName": row['color'],
+            "Quantity": 0,
+            "Price": 0,
             "Cost": 0,
-            "StatusID": 1,
-            "OrderDetailModifiers": [
-              {
-                "ModifierID": 0,
-                "ModifierName": row['color'],
-                "Quantity": 0,
-                "Price": 0,
-                "Cost": 0,
-                "StatusID": 1
-              },
-              {
-                "ModifierID": 0,
-                "ModifierName": row['sizeselect'],
-                "Quantity": 0,
-                "Price": 0,
-                "Cost": 0,
-                "StatusID": 1
-              }
-            ]
-
+            "StatusID": 1
+          },
+          {
+            "ModifierID": 0,
+            "ModifierName": row['sizeselect'],
+            "Quantity": 0,
+            "Price": 0,
+            "Cost": 0,
+            "StatusID": 1
           }
-      );
+        ]
+      });
       amount += double.parse(row['price']);
       //print(amount);
       //print(row);
@@ -99,73 +93,106 @@ class _AddressPageState extends State<AddressPage> {
         setState(() {
           showBtn = true;
         });
-
       } else {
         setState(() {
           showBtn = false;
-        });        print('No showBtn');
+        });
+        print('No showBtn');
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    onClick()async{
+    onClick() async {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
             return Center(
-                child: const SpinKitWave(color: kPrimaryColor, type: SpinKitWaveType.center));
+                child: const SpinKitWave(
+                    color: kPrimaryColor, type: SpinKitWaveType.center));
           });
 
+      if (dateindex != null) {
+        final storage = new FlutterSecureStorage();
 
-      final storage = new FlutterSecureStorage();
+        Map<String, dynamic> body = {
+          "CustomerID": await storage.read(key: "_userID"),
+          "OrderType": "APP",
+          "OrderDate": "2021-01-28",
+          "StatusID": 2,
+          "LocationID": 2112,
+          "CustomerOrders": {
+            "Name": "Rafi",
+            "Email": "",
+            "Mobile": "0544916463",
+            "Description": "",
+            "AddressNickName": "SHORT Address",
+            "AddressType": "Home",
+            "Address": "riyadh",
+            "Longitude": "",
+            "Latitude": "",
+            "LocationURL": ""
+          },
+          "CustomerOrders": {
+            "Name": addressSelected['NickName'],
+            "Email": "notavailable@mail.com",
+            "Mobile": addressSelected['ContactNo'],
+            "Description": "",
+            "AddressNickName": addressSelected['StreetName'],
+            "AddressType": "Home",
+            "Address": addressSelected['Address'],
+            "Longitude": "",
+            "Latitude": "",
+            "LocationURL": ""
+          },
+          "OrderCheckouts": {
+            "PaymentMode": 1,
+            "AmountPaid": amount,
+            "AmountTotal": amount,
+            "ServiceCharges": 0,
+            "GrandTotal": 0,
+            "Tax": 0,
+            "CheckoutDate": "2021-01-28",
+            "StatusID": 2
+          },
+          "OrderDetails": items
+        };
+        String jsonBody = json.encode(body);
+        print(jsonBody);
 
-      Map<String, dynamic> body = {
-        "CustomerID": await storage.read(key: "_userID"),
-        "OrderType": "APP",
-        "OrderDate": "2021-01-28",
-        "StatusID": 2,
-        "LocationID": 2112,
-        "OrderCheckouts": {
-          "PaymentMode": 1,
-          "AmountPaid": amount,
-          "AmountTotal": amount,
-          "ServiceCharges": 0,
-          "GrandTotal": 0,
-          "Tax": 0,
-          "CheckoutDate": "2021-01-28",
-          "StatusID": 2
-        },
-        "OrderDetails": items
-      };
-      String jsonBody = json.encode(body);
-      //print(jsonBody);
+        final headers = {'Content-Type': 'application/json'};
 
-      final headers = {'Content-Type': 'application/json'};
+        http.Response res = await http.post(
+          'http://retailapi.airtechsolutions.pk/api/orders/new',
+          headers: headers,
+          body: jsonBody,
+        );
+        var data = json.decode(res.body.toString());
+        //print(data);
 
-      http.Response res = await http.post(
-        'http://retailapi.airtechsolutions.pk/api/orders/new',
-        headers: headers,
+        if (data['description'] ==
+            "Your order has been punched successfully.") {
+          Navigator.pop(context);
+          final dbHelper = DatabaseHelper.instance;
+          await dbHelper.deleteAll();
+          showAlert(context);
 
-        body: jsonBody,
-      );
-      var data = json.decode(res.body.toString());
-      //print(data);
-
-      if(data['description'] == "Your order has been punched successfully."){
+          // Get.to(BottomNavigationBarPage());
+        } else {
+          Navigator.pop(context);
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: "Address not selected. ",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: kPrimaryColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
         Navigator.pop(context);
-        final dbHelper = DatabaseHelper.instance;
-        await dbHelper.deleteAll();
-        showAlert(context);
-
-        // Get.to(BottomNavigationBarPage());
-      }
-      else{
-        Navigator.pop(context);
-
       }
     }
 
@@ -204,7 +231,7 @@ class _AddressPageState extends State<AddressPage> {
                                       dateindex = index;
                                       addressSelected =
                                           address['Address'][index];
-                                      //print(addressSelected);
+                                      print(addressSelected);
                                     });
                                   },
                                   child: Container(
@@ -257,9 +284,8 @@ class _AddressPageState extends State<AddressPage> {
                                               icon: Icon(Icons.edit_outlined),
                                               onPressed: () {
                                                 Get.to(EditAddressPage(
-                                                    address:
-                                                    address['Address']
-                                                    [index]));
+                                                    address: address['Address']
+                                                        [index]));
                                               },
                                             ),
                                             // SizedBox(
@@ -303,53 +329,55 @@ class _AddressPageState extends State<AddressPage> {
                     ),
                   )
                 : Container(),
-            showBtn ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    'assets/images/undraw_Directions_re_kjxs.png',
-                    width: MediaQuery.of(context).size.width / 2,
+            showBtn
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/images/undraw_Directions_re_kjxs.png',
+                          width: MediaQuery.of(context).size.width / 2,
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'No Address Available',
+                          style: Theme.of(context).textTheme.headline1,
+                        ).tr(),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'Please add address so we can deliver. Happy Shopping  :)',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ).tr(),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 5,
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
+            showBtn
+                ? Container()
+                : Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 15.0),
+                      child: FadeInAnimation(
+                        2,
+                        child: RaisedButtonWidget(
+                          title: 'order.next',
+                          onPressed: () {
+                            onClick();
+                          },
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 15.0),
-                  Text(
-                    'No Address Available',
-                    style: Theme.of(context).textTheme.headline1,
-                  ).tr(),
-                  SizedBox(height: 15.0),
-                  Text(
-                    'Please add address so we can deliver. Happy Shopping  :)',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ).tr(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 5,
-                  ),
-                ],
-              ),
-            ) : Container() ,
-            showBtn ? Container() : Flexible(
-              flex: 1,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 15.0),
-                child: FadeInAnimation(
-                  2,
-                  child: RaisedButtonWidget(
-                    title: 'order.next',
-                    onPressed: (){
-                      onClick();
-                    },
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
     );
   }
-
-
 
   void navigateToPaymentPage() {
     Get.to(PaymentPage());
@@ -391,7 +419,8 @@ class _AddressPageState extends State<AddressPage> {
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                   child: Container(
                     color: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
                     height: height * 0.5,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -408,7 +437,8 @@ class _AddressPageState extends State<AddressPage> {
                                     size: 50,
                                     color: Colors.white,
                                   ),
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
                                 ),
                                 SizedBox(height: 20),
                                 Text(
@@ -424,9 +454,8 @@ class _AddressPageState extends State<AddressPage> {
                                 SizedBox(height: 20),
                                 RaisedButtonWidget(
                                     title: 'CLOSE',
-                                    onPressed: () => Get.offAll(BottomNavigationBarPage())
-
-                                ),
+                                    onPressed: () =>
+                                        Get.offAll(BottomNavigationBarPage())),
                               ],
                             ),
                           ),
@@ -445,5 +474,4 @@ class _AddressPageState extends State<AddressPage> {
         context: context,
         pageBuilder: (context, animation1, animation2) {});
   }
-
 }

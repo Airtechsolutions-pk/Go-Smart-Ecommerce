@@ -80,6 +80,40 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                 ),
               ),
               SizedBox(height: 15.0),
+              Text('Customer Details',
+                  style: Theme.of(context).textTheme.headline3)
+                  .tr(),
+              SizedBox(height: 12.0),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  border: Border.all(color: Theme.of(context).accentColor),
+                ),
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                    children: [
+                      orderCardItem(context,
+                          title: "Customer Name",
+                          data: widget.order['CustomerOrders']['Name'].toString()),
+                      SizedBox(height: 12.0),
+                      // orderCardItem(context,
+                      //     title: "order.shipping",
+                      //     data: "\$ ${order.shippingPrice}"),
+                      // SizedBox(height: 12.0),
+                      orderCardItem(context,
+                          title: "Customer Address",
+                          data: widget.order['CustomerOrders']['Address'].toString()),
+                      SizedBox(height: 12.0),
+                      orderCardItem(context,
+                          title: "Customer Mobile",
+                          data: widget.order['CustomerOrders']['Mobile'].toString()),
+                      SizedBox(height: 4.0),
+                    ]),
+              ),
+              SizedBox(height: 15.0),
+
+              SizedBox(height: 15.0),
               Text('Order Details',
                   style: Theme.of(context).textTheme.headline3)
                   .tr(),
