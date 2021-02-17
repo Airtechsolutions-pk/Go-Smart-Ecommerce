@@ -300,12 +300,8 @@ class SignUpPage extends StatelessWidget {
                       },
                     ),
                   ),
-                  SizedBox(height: 15.0),
-                  buildDivider(context),
-                  SizedBox(height: 15.0),
-                  buildGoogleSignInButton(),
-                  SizedBox(height: 15.0),
-                  buildFacebookSignInButton(),
+                  
+                  
                   SizedBox(height: 15.0),
                   buildSignUpButton(context),
                   SizedBox(height: 15.0),
@@ -356,14 +352,14 @@ class SignUpPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'signin.noaccount',
+              'Already have an account ?',
               style: Theme.of(context).textTheme.subtitle1,
             ).tr(),
             SizedBox(width: 7.0),
             GestureDetector(
               onTap: navigateToSignUp,
               child: Text(
-                'signin.register',
+                'Sign in',
                 style: Theme.of(context)
                     .textTheme
                     .headline4
@@ -491,7 +487,7 @@ class SignUpPage extends StatelessWidget {
     return SideInAnimation(
       2,
       child: Text(
-        'signin.subtitle',
+        'Signup to continue',
         style: Theme.of(context).textTheme.subtitle1,
       ).tr(),
     );
@@ -531,7 +527,7 @@ class SignUpPage extends StatelessWidget {
   }
 
   void navigateToSignUp() {
-    Get.to(SignUpPage());
+    Get.to(SignInPage());
   }
 
   void navigateToForgotPassword() {

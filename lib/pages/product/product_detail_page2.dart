@@ -52,7 +52,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
   @override
   Widget build(BuildContext context) {
      //print('//print kara ');
-    //print(widget);
+    print(widget.product);
 
     double stackWidth = MediaQuery.of(context).size.width;
     double stackHeight = MediaQuery.of(context).size.height;
@@ -285,7 +285,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
     double stackHeight = MediaQuery.of(context).size.height;
     List<Widget> textWidgetList = List<Widget>();
 
-    if (widget.product['Modifiers'] == null) {
+    if (widget.product['Modifiers'].length == 0) {
       size = false;
     } else {
       //print('yes');
@@ -327,7 +327,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
     }
     List<Widget> colorWidgetList = List<Widget>();
 
-    if (widget.product['Variants'] == null) {
+    if (widget.product['Variants'].length == 0) {
       colors = false;
     } else {
       //print('yes');
@@ -520,13 +520,17 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
           border: Border.all(
               color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
         ),
-        child: CachedNetworkImage(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15.0),
+          child: CachedNetworkImage(
+          
           imageUrl: widget.product['ItemImages'][index],
           width: double.infinity,
           fit: BoxFit.fitWidth,
           height: 250.0,
         ),
-      ),
+      )
+        ),
     );
   }
 }

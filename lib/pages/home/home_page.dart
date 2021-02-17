@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future<List> dosomestuff() async {
     http.Response res = await http.get(
-      'http://retailapi.airtechsolutions.pk/api/menu/2112',
+      'http://retailapi.airtechsolutions.pk/api/menu/2122',
     );
 
     Map<String, dynamic> map = json.decode(res.body);
@@ -491,7 +491,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return SideInAnimation(
       4,
       child: Image.asset(
-        'assets/images/products/564x564.jpg',
+        'assets/images/products/umaiz.png',
         width: double.infinity,
         height: 250.0,
         fit: BoxFit.fitWidth,

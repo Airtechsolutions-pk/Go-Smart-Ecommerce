@@ -201,12 +201,8 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   SizedBox(height: 15.0),
-                  buildDivider(context),
-                  SizedBox(height: 15.0),
-                  buildGoogleSignInButton(),
-                  SizedBox(height: 15.0),
-                  buildFacebookSignInButton(),
-                  SizedBox(height: 15.0),
+                  
+                
                   buildSignUpButton(context),
                   SizedBox(height: 15.0),
                   // Text(tr('ewew'))
