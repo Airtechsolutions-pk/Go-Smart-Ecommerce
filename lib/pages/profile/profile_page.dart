@@ -76,7 +76,33 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       buildFavorite(context),
                       buildTheme(context, themeProv),
-                      // buildAbout(context),
+                      buildAbout(context),
+                      SideInAnimation(
+                        7,
+                        child: ListTile(
+                          onTap: () async{
+                            const url = 'https://play.google.com/store/apps/details?id=com.airtechecommerce.AirEcom';
+                            if (await canLaunch(url)) {
+                            await launch(url);
+                            } else {
+                            throw 'Could not launch $url';
+                            }
+                          },
+                          leading: Icon(
+                            FlutterIcons.information_outline_mco,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          title: Text('Share',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  .copyWith(fontSize: 14.0))
+                              .tr(),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                          ),
+                        ),
+                      ),
                       buildSignOut(context),
                     ],
                   ),
@@ -153,29 +179,29 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // SideInAnimation buildAbout(BuildContext context) {
-  //   return SideInAnimation(
-  //     7,
-  //     child: ListTile(
-  //       onTap: () {
-  //         Get.to(AboutPage());
-  //       },
-  //       leading: Icon(
-  //         FlutterIcons.information_outline_mco,
-  //         color: Theme.of(context).primaryColor,
-  //       ),
-  //       title: Text('profile.aboutus',
-  //               style: Theme.of(context)
-  //                   .textTheme
-  //                   .bodyText2
-  //                   .copyWith(fontSize: 14.0))
-  //           .tr(),
-  //       trailing: Icon(
-  //         Icons.arrow_forward_ios,
-  //       ),
-  //     ),
-  //   );
-  // }
+  SideInAnimation buildAbout(BuildContext context) {
+    return SideInAnimation(
+      7,
+      child: ListTile(
+        onTap: () {
+          Get.to(AboutUsPage());
+        },
+        leading: Icon(
+          FlutterIcons.information_outline_mco,
+          color: Theme.of(context).primaryColor,
+        ),
+        title: Text('profile.aboutus',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(fontSize: 14.0))
+            .tr(),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+        ),
+      ),
+    );
+  }
 
   SideInAnimation buildTheme(
       BuildContext context, ThemeChangerProvider themeProv) {

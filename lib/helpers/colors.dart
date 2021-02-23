@@ -3,7 +3,9 @@ part of 'helpers.dart';
 
 
 String priceGlobal = 'PKR ';
-
+int TaxGlobal = 12;
+double discount = 0.8;
+int DeliveryGlobal = 50;
 // Background and Card Color
 const kPrimaryColor = Color(0xFF3c80e3);
 const kBackgroundLightColor = Color(0xFFFFFFFF);

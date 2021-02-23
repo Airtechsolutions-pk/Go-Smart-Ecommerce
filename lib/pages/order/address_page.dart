@@ -149,8 +149,8 @@ class _AddressPageState extends State<AddressPage> {
           },
           "OrderCheckouts": {
             "PaymentMode": 1,
-            "AmountPaid": amount,
-            "AmountTotal": amount,
+            "AmountPaid": amount + TaxGlobal + DeliveryGlobal,
+            "AmountTotal": amount + TaxGlobal + DeliveryGlobal,
             "ServiceCharges": 0,
             "GrandTotal": 0,
             "Tax": 0,

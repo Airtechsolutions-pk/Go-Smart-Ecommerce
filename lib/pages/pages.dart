@@ -46,6 +46,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:path/path.dart';
@@ -56,6 +57,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:share/share.dart';
 
 part 'bottom_navigation_page.dart';
 part 'forgotPassword/forgot_password_page.dart';
@@ -89,6 +91,7 @@ part 'product/write_review_page.dart';
 part 'profile/profile_page.dart';
 part 'profile/profile_detail_page.dart';
 part 'profile/profile_addaddress_page.dart';
+
 part 'profile/profile_editaddress.dart';
 
 part 'search/filter_page.dart';
@@ -106,3 +109,4 @@ part 'profile/profile_change_phone_page.dart';
 part 'profile/profile_change_password_page.dart';
 part 'profile/profile_address_page.dart';
 part 'profile/profile_payment_page.dart';
+part 'profile/profile_about.dart';

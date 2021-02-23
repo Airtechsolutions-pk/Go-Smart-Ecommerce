@@ -17,7 +17,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage>
 
   var currentTab = [
     HomePage(),
-    SearchPg(),
+    SearchPgExtra(),
     CartPage(),
     FavoritePage(),
     ProfilePage(),

@@ -453,13 +453,21 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
               ),
             ),
             SizedBox(width: 25.0),
-            // GestureDetector(
-            //   onTap: () {},
-            //   child: Icon(
-            //     Icons.favorite_border,
-            //     color: Theme.of(context).errorColor,
-            //   ),
-            // ),
+            GestureDetector(
+              onTap: () {
+                Share.share(
+                  "Product Name: ${widget.product['Name']} \nProduct Price: ${widget.product['Price']}"
+                      "\nProduct Description: ${widget.product['Description']}"
+                      "\n${widget.product['ItemImages'][selectedImage]}",
+                );
+
+
+              },
+              child: Icon(
+                Icons.share_outlined,
+                color: kPrimaryColor,
+              ),
+            ),
           ],
         ),
       ),
@@ -480,7 +488,6 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
               child: CachedNetworkImage(
                 imageUrl: widget.product['ItemImages'][selectedImage],
                 width: double.infinity,
-                fit: BoxFit.fitWidth,
                 height: 250.0,
               ),
             ),

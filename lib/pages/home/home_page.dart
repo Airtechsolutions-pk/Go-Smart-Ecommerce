@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     if (map['description'] == "Success") {
       //print('show kr ');
-
+      searchArray.searchArrayData.clear();
       List<dynamic> data = map["Categories"];
 
       data.forEach((category) {
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void navigateToSearchPg2() {
-    Get.to(SearchPg());
+    Get.to(SearchPgExtra());
   }
 
   void navigateToProductDetailPage(Product product) {

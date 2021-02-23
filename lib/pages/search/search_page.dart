@@ -163,11 +163,33 @@ class _SearchPgExtraState extends State<SearchPgExtra> {
                       child: ListTile(
                         key: UniqueKey(),
                         title: Text(snapshot.data[i].Name),
-                        onTap: () {
-                          //print(snapshot.data[i].Name);
-                          //print(snapshot.data[i].ID);
-                          //print(searchArray.searchArrayData);
+                        subtitle: Text(
+                            snapshot.data[i].Price.toString(), style: TextStyle(
+                          color: kPrimaryColor
+                        )
+                        ),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
 
+                          child: Container(
+                            color: kCardImageBCColor,
+                            width: 60,
+                            height: 60,
+                            child: CachedNetworkImage(
+                              imageUrl:
+                              snapshot.data[i].Image,
+                              width: double.infinity,
+                              fit: BoxFit.fitWidth,
+                              height: MediaQuery.of(context).size.height * 0.1,
+                            ),
+                          )),
+                        onTap: () {
+                          print(snapshot.data[i].Name);
+                          print(snapshot.data[i].ID);
+                          print(snapshot.data[i].Image);
+
+                          //print(searchArray.searchArrayData);
+                          //
                           var filterData = searchArray.searchArrayData
                               .where((element) =>
                                   element["ID"] == snapshot.data[i].ID)
@@ -199,24 +221,24 @@ class _SearchPgExtraState extends State<SearchPgExtra> {
 
   Future<List<SearchData>> _getAPI() async {
     //print('_getAPI');
-    var response =
-        await http.get('http://retailapi.airtechsolutions.pk/api/menu/2112');
-    Map<String, dynamic> map = json.decode(response.body);
+    // var response =
+    //     await http.get('http://retailapi.airtechsolutions.pk/api/menu/2112');
+    // Map<String, dynamic> map = json.decode(response.body);
+    //
+    // List<dynamic> data = map["Categories"];
+    // var items = {'Items': []};
+    //
+    // data.forEach((category) {
+    //   if (category['Subcategories'] != null) {
+    //     category['Subcategories'].forEach((subcategory) {
+    //       items['Items'].addAll(subcategory['Items']);
+    //     });
+    //   }
+    // });
+    // //print(items['Items']);
 
-    List<dynamic> data = map["Categories"];
-    var items = {'Items': []};
-
-    data.forEach((category) {
-      if (category['Subcategories'] != null) {
-        category['Subcategories'].forEach((subcategory) {
-          items['Items'].addAll(subcategory['Items']);
-        });
-      }
-    });
-    //print(items['Items']);
-
-    return items['Items']
-        .map<SearchData>((m) => SearchData(m['Name'], m['ID']))
+    return searchArray.searchArrayData
+        .map<SearchData>((m) => SearchData(m['Name'], m['ID'], m['Price'], m['Image']))
         .toList();
   }
 }
@@ -225,16 +247,21 @@ class _SearchPgExtraState extends State<SearchPgExtra> {
 
 class SearchData {
   final String Name;
-  final int ID;
+  final String Image;
 
-  SearchData(this.Name, this.ID);
+  final int ID;
+  final double Price;
+  SearchData(this.Name, this.ID, this.Price, this.Image);
 }
 
 class Rank {
   final String Name;
-  int rank;
+  final String Image;
 
-  Rank(this.Name, this.rank);
+  int rank;
+  final double Price;
+
+  Rank(this.Name, this.rank, this.Price, this.Image);
 
   @override
   String toString() => Name;

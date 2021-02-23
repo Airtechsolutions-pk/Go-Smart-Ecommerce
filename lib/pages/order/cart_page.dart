@@ -12,7 +12,7 @@ class _CartPageState extends State<CartPage> {
   String PaymentText = 'Cash on Delivery';
   var allRows;
   var items = {'Items': []};
-
+  double Totalamount;
   void navigateToAddressPage() {
     Get.to(AddressPage());
   }
@@ -47,7 +47,9 @@ class _CartPageState extends State<CartPage> {
       showCart = false;
     } else {
       showCart = true;
+       Totalamount = amount + TaxGlobal + DeliveryGlobal;
     }
+
 
     setState(() {});
   }
@@ -114,7 +116,25 @@ class _CartPageState extends State<CartPage> {
                                     .textTheme
                                     .subtitle2)
                                 .tr(),
-                            Text('0',
+                            Text('$priceGlobal $DeliveryGlobal',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .subtitle1),
+                          ],
+                        ),
+                        SizedBox(height: 12.0),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Tax',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .subtitle2)
+                                .tr(),
+                            Text('$priceGlobal $TaxGlobal',
                                 style: Theme
                                     .of(context)
                                     .textTheme
@@ -141,7 +161,7 @@ class _CartPageState extends State<CartPage> {
                                   .subtitle2,
                             ).tr(),
                             Text(
-                              '$priceGlobal $amount',
+                              '$priceGlobal $Totalamount',
                               style: Theme
                                   .of(context)
                                   .textTheme
