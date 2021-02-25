@@ -14,8 +14,25 @@ class ProductCard2 extends StatefulWidget {
 
 class _ProductCard2State extends State<ProductCard2> {
   bool heart = false;
+  String priceGlobal;
+  String _DeliveryCharges;
+  String _TaxPercentTaxPercent;
 
+  @override
+  void initState() {
+    getGlobal();
+  }
 
+getGlobal() async {
+  final storage = new FlutterSecureStorage();
+   priceGlobal = await storage.read(key: "_Currency");
+
+   _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
+   _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
+   setState(() {
+
+   });
+}
 
   @override
   Widget build(BuildContext context) {

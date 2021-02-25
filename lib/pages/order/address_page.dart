@@ -14,15 +14,33 @@ class _AddressPageState extends State<AddressPage> {
   String _userID = "";
   num amount = 0;
   var items = [];
+  String priceGlobal;
+  String DeliveryGlobal;
+  String TaxGlobal;
+
+  String _LocationID;
+  String _UserID;
 
   @override
   void initState() {
     setState(() {
       getAddress();
       this._query();
+      getGlobal();
     });
   }
+  getGlobal() async {
+    final storage = new FlutterSecureStorage();
+    priceGlobal = await storage.read(key: "_Currency");
+    _LocationID = await storage.read(key: "_LocationID");
+    _UserID = await storage.read(key: "_UserID");
 
+    TaxGlobal = await storage.read(key: "_TaxPercentTaxPercent");
+    DeliveryGlobal = await storage.read(key: "_DeliveryCharges");
+    setState(() {
+
+    });
+  }
   void _query() async {
     //print('cart');
     final dbHelper = DatabaseHelper.instance;
@@ -117,24 +135,17 @@ class _AddressPageState extends State<AddressPage> {
       if (dateindex != null) {
         final storage = new FlutterSecureStorage();
 
+
+        double Tax = int.parse(TaxGlobal) / 100 * amount;
+
         Map<String, dynamic> body = {
           "CustomerID": await storage.read(key: "_userID"),
           "OrderType": "APP",
           "OrderDate": "2021-01-28",
           "StatusID": 2,
-          "LocationID": 2112,
-          "CustomerOrders": {
-            "Name": "Rafi",
-            "Email": "",
-            "Mobile": "0544916463",
-            "Description": "",
-            "AddressNickName": "SHORT Address",
-            "AddressType": "Home",
-            "Address": "riyadh",
-            "Longitude": "",
-            "Latitude": "",
-            "LocationURL": ""
-          },
+          "LocationID": _LocationID,
+          "UserID": _UserID,
+
           "CustomerOrders": {
             "Name": addressSelected['NickName'],
             "Email": "notavailable@mail.com",
@@ -149,11 +160,11 @@ class _AddressPageState extends State<AddressPage> {
           },
           "OrderCheckouts": {
             "PaymentMode": 1,
-            "AmountPaid": amount + TaxGlobal + DeliveryGlobal,
-            "AmountTotal": amount + TaxGlobal + DeliveryGlobal,
-            "ServiceCharges": 0,
+            "AmountPaid": amount,
+            "AmountTotal": amount + int.parse(DeliveryGlobal) + Tax ,
+            "ServiceCharges": int.parse(DeliveryGlobal),
             "GrandTotal": 0,
-            "Tax": 0,
+            "Tax": Tax,
             "CheckoutDate": "2021-01-28",
             "StatusID": 2
           },
@@ -170,14 +181,14 @@ class _AddressPageState extends State<AddressPage> {
           body: jsonBody,
         );
         var data = json.decode(res.body.toString());
-        //print(data);
+        print(data);
 
         if (data['description'] ==
             "Your order has been punched successfully.") {
           Navigator.pop(context);
           final dbHelper = DatabaseHelper.instance;
           await dbHelper.deleteAll();
-          showAlert(context);
+          showAlert(context, data['OrderID'] );
 
           // Get.to(BottomNavigationBarPage());
         } else {
@@ -263,7 +274,7 @@ class _AddressPageState extends State<AddressPage> {
                                         Text(
                                             showAddress
                                                 ? address['Address'][index]
-                                                    ['Address']
+                                                    ['StreetName']
                                                 : '...',
                                             style: Theme.of(context)
                                                 .textTheme
@@ -272,7 +283,7 @@ class _AddressPageState extends State<AddressPage> {
                                         Text(
                                             showAddress
                                                 ? address['Address'][index]
-                                                    ['Address']
+                                                    ['NickName']
                                                 : '...',
                                             style: Theme.of(context)
                                                 .textTheme
@@ -402,7 +413,8 @@ class _AddressPageState extends State<AddressPage> {
     );
   }
 
-  void showAlert(BuildContext context) {
+  void showAlert(BuildContext context, orderID) {
+    print(orderID);
     double statusBarHeight = MediaQuery.of(context).padding.top;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -421,9 +433,11 @@ class _AddressPageState extends State<AddressPage> {
                     color: Colors.white,
                     padding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
-                    height: height * 0.5,
+                    height: height * 0.53,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center ,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Center(
@@ -445,6 +459,22 @@ class _AddressPageState extends State<AddressPage> {
                                   'order.success',
                                   style: Theme.of(context).textTheme.headline1,
                                 ).tr(),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center ,//Center Row contents horizontally,
+                                  crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
+                                    children:[
+                                  Text(
+                                    'Order # ',
+                                    style: Theme.of(context).textTheme.bodyText2,
+                                    textAlign: TextAlign.center,
+                                  ).tr(),
+                                  Text(
+                                    '${orderID}',
+                                    style: Theme.of(context).textTheme.headline1,
+                                  ).tr(),
+                                ]),
+
                                 SizedBox(height: 12.0),
                                 Text(
                                   'order.subtitlesuccess',

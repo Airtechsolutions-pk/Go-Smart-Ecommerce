@@ -115,9 +115,11 @@ class _ProfilePageState extends State<ProfilePage> {
       ) : Center(
         child: Container(
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+               // mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: 150.0),
+
                   Image.asset(
                     'assets/images/undraw_Login_re_4vu2.png',
                     width: MediaQuery.of(context).size.width / 2,

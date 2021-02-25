@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool show = false;
   var items = {'Items': []};
   var featureProduct = [];
-
+String _LocationID;
   bool showFeat = false;
 
   var cat = {'Cat': []};
@@ -59,11 +59,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<List> dosomestuff() async {
-    http.Response res = await http.get(
-      'http://retailapi.airtechsolutions.pk/api/menu/2122',
-    );
 
-    Map<String, dynamic> map = json.decode(res.body);
+    print(globalArray.globalArrayData);
+    print('han karwa');
+    final storage = new FlutterSecureStorage();
+    _LocationID = await storage.read(key: "_LocationID");
+
+    // http.Response res = await http.get(
+    //   'http://retailapi.airtechsolutions.pk/api/menu/${_LocationID}',
+    // );
+
+    Map<String, dynamic> map = json.decode(globalArray.globalArrayData);
 
     if (map['description'] == "Success") {
       //print('show kr ');
@@ -113,9 +119,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
       cat['Cat'].addAll(map['Categories']);
       //print(cat);
-      setState(() {
-        show = true;
-      });
+
+
+      Timer(
+        Duration(milliseconds: 1500),
+            ()  {      setState(() {
+              show = true;
+            });
+
+        },
+      );
     }
   }
 

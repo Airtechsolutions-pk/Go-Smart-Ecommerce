@@ -9,10 +9,176 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   var _userEmail = '';
   var _userPassword = '';
+  bool _passwordVisible = false;
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
 
   @override
   Widget build(BuildContext context) {
     // final signInProv = Provider.of<SignInProvider>(context);
+
+    Future<http.Response> _login() async {
+      final FacebookLogin facebookSignIn = new FacebookLogin();
+
+      final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+
+
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          final FacebookAccessToken accessToken = result.accessToken;
+          print(accessToken);
+          final String token = accessToken.token;
+
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Center(
+                    child: const SpinKitWave(
+                        color: kPrimaryColor, type: SpinKitWaveType.center));
+              });
+
+          final response = await http.get(
+              'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+          final profile = jsonDecode(response.body);
+          print(profile);
+
+
+          String url =
+              'http://retailapi.airtechsolutions.pk/api/customer/login/${profile['email']}/null/sm';
+
+          //print(url);
+          http.Response res = await http.get(
+            url,
+          );
+          var data = json.decode(res.body.toString());
+          //print(data);
+
+          if (data['description'].toString() == "Success") {
+            //print('hogya');
+            Navigator.pop(context);
+            //print(data['customer']['Addresses']);
+            //print(data['customer']['CustomerID']);
+            //print(data['customer']['Email']);
+            //print(data['customer']['FullName']);
+            final _storage = FlutterSecureStorage();
+
+            await _storage.write(key: 'imei', value: 'loginhuavaha');
+            await _storage.write(key: '_userEmail', value: _userEmail.trim());
+            await _storage.write(
+                key: '_userPassword', value: _userPassword.trim());
+            await _storage.write(
+                key: '_userID', value: data['customer']['CustomerID'].toString());
+            await _storage.write(
+                key: '_userEmail', value: data['customer']['Email'].toString());
+            await _storage.write(
+                key: '_userName', value: profile['name']);
+            navigateToHomePage(context);
+          } else {
+            Navigator.pop(context);
+            Fluttertoast.showToast(
+                msg: "Something went wrong.",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: kPrimaryColor,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          }
+          //
+
+          print('''
+         Logged in!
+         
+         Token: ${accessToken.token}
+         User id: ${accessToken.userId}
+         Expires: ${accessToken.expires}
+         Permissions: ${accessToken.permissions}
+         Declined permissions: ${accessToken.declinedPermissions}
+         ''');
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          print('Login cancelled by the user.');
+          break;
+        case FacebookLoginStatus.error:
+          print('Something went wrong with the login process.\n'
+              'Here\'s the error Facebook gave us: ${result.errorMessage}');
+          break;
+      }
+    }
+
+
+    Future<http.Response> _loginGooGle() async {
+
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return Center(
+                child: const SpinKitWave(
+                    color: kPrimaryColor, type: SpinKitWaveType.center));
+          });
+
+      showToast(msg: 'Google Sign In Clicked!');
+      try{
+        await _googleSignIn.signIn();
+        print(_googleSignIn.currentUser.displayName);
+        print(_googleSignIn.currentUser.photoUrl);
+        print(_googleSignIn.currentUser.id);
+        print(_googleSignIn.currentUser.email);
+
+
+        String url =
+            'http://retailapi.airtechsolutions.pk/api/customer/login/${_googleSignIn.currentUser.email}/null/sm';
+
+        //print(url);
+        http.Response res = await http.get(
+          url,
+        );
+        var data = json.decode(res.body.toString());
+        //print(data);
+
+        if (data['description'].toString() == "Success") {
+          //print('hogya');
+          Navigator.pop(context);
+          //print(data['customer']['Addresses']);
+          //print(data['customer']['CustomerID']);
+          //print(data['customer']['Email']);
+          //print(data['customer']['FullName']);
+          final _storage = FlutterSecureStorage();
+
+          await _storage.write(key: 'imei', value: 'loginhuavaha');
+          await _storage.write(key: '_userEmail', value: _userEmail.trim());
+          await _storage.write(
+              key: '_userPassword', value: _userPassword.trim());
+          await _storage.write(
+              key: '_userID', value: data['customer']['CustomerID'].toString());
+          await _storage.write(
+              key: '_userEmail', value: data['customer']['Email'].toString());
+          await _storage.write(
+              key: '_userName', value: _googleSignIn.currentUser.displayName);
+          navigateToHomePage(context);
+        } else {
+          Navigator.pop(context);
+          Fluttertoast.showToast(
+              msg: "Something went wrong.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: kPrimaryColor,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+
+
+      } catch (err){
+        print(err);
+      }
+
+
+
+    }
+
 
     Future<http.Response> _trySubmit() async {
       final isValid = _formKey.currentState.validate();
@@ -23,14 +189,6 @@ class _SignInPageState extends State<SignInPage> {
         //print(_userEmail.trim());
         //print(_userPassword.trim());
 
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return Center(
-                  child: const SpinKitWave(
-                      color: kPrimaryColor, type: SpinKitWaveType.center));
-            });
 
         String url =
             'http://retailapi.airtechsolutions.pk/api/customer/login/${_userEmail.trim()}/${_userPassword.trim()}';
@@ -79,7 +237,6 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     return Scaffold(
-
       body: Container(
         child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -152,10 +309,27 @@ class _SignInPageState extends State<SignInPage> {
                       _userPassword = value;
                     },
                     cursorColor: Theme.of(context).primaryColor,
-                    obscureText: true,
+                    obscureText:
+                        !_passwordVisible, //This will obscure text dynamically
+
                     style: Theme.of(context).textTheme.bodyText2,
                     autocorrect: false,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          // Update the state i.e. toogle the state of passwordVisible variable
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
                       hintText: 'Password',
                       hintStyle: Theme.of(context).textTheme.subtitle2,
                       prefixIcon: Icon(FlutterIcons.lock_fea),
@@ -201,10 +375,86 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   SizedBox(height: 15.0),
-                  
-                
+
                   buildSignUpButton(context),
                   SizedBox(height: 15.0),
+                  GestureDetector(
+                    onTap: (){
+                      _login();
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50.0,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            left: 20.0,
+                            top: 10.0,
+                            bottom: 10.0,
+                            child: Image.asset(
+                              'assets/images/facebook.png',
+                            ),
+                          ),
+                          OutlineButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            focusColor: Theme.of(context).accentColor,
+                            color: Theme.of(context).primaryColor,
+                            borderSide: BorderSide(
+                              color: Theme.of(context).accentColor,
+                            ),
+                            highlightedBorderColor: Theme.of(context).accentColor,
+                            child: Center(
+                              child: Text(
+                                'Sign in with Facebook',
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ).tr(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15.0),
+                  GestureDetector(
+                    onTap: (){
+                      _loginGooGle();
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 50.0,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            left: 20.0,
+                            top: 15.0,
+                            bottom: 15.0,
+                            child: Image.asset(
+                              'assets/images/google_logo.png',
+                            ),
+                          ),
+                          OutlineButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            focusColor: Theme.of(context).accentColor,
+                            color: Theme.of(context).primaryColor,
+                            borderSide: BorderSide(
+                              color: Theme.of(context).accentColor,
+                            ),
+                            highlightedBorderColor: Theme.of(context).accentColor,
+                            child: Center(
+                              child: Text(
+                                'Sign in with Google',
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ).tr(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                   // Text(tr('ewew'))
                 ],
               ),
@@ -272,12 +522,11 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  FadeInAnimation buildFacebookSignInButton() {
+  FadeInAnimation buildFacebookSignInButton(BuildContext context) {
     return FadeInAnimation(
       6,
       child: FacebookSignInButtonWidget(
         title: 'signin.facebook',
-        onPressed: facebookSignInClicked,
       ),
     );
   }
@@ -338,50 +587,6 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  // SideInAnimation buildEmailTextField() {
-  //   return SideInAnimation(
-  //     3,
-  //     child: TextFormField(
-  //       cursorColor: Theme.of(context).primaryColor,
-  //       obscureText: false,
-  //       keyboardType: TextInputType.emailAddress,
-  //       style: Theme.of(context).textTheme.bodyText2,
-  //       autocorrect: false,
-  //       decoration: InputDecoration(
-  //         hintText: 'Email Address',
-  //         hintStyle: Theme.of(context).textTheme.subtitle2,
-  //         prefixIcon: Icon(FlutterIcons.mail_fea),
-  //         enabledBorder: OutlineInputBorder(
-  //           borderRadius: BorderRadius.circular(12.0),
-  //           borderSide: BorderSide(
-  //             color: Theme.of(context).accentColor.withOpacity(.4),
-  //           ),
-  //         ),
-  //         focusedBorder: OutlineInputBorder(
-  //           borderRadius: BorderRadius.circular(12.0),
-  //           borderSide: BorderSide(
-  //             color: Theme.of(context).primaryColor,
-  //           ),
-  //         ),
-  //         focusedErrorBorder: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(12.0),
-  //             borderSide: BorderSide(
-  //               color: Theme.of(context).errorColor,
-  //             )),
-  //         errorBorder: OutlineInputBorder(
-  //             borderRadius: BorderRadius.circular(12.0),
-  //             borderSide: BorderSide(
-  //               color: Theme.of(context).errorColor,
-  //             )),
-  //       ),
-  //     )
-  //
-  //
-  //
-  //
-  //
-  //   );
-  // }
 
   SideInAnimation buildSubtitle(BuildContext context) {
     return SideInAnimation(
@@ -438,11 +643,27 @@ class _SignInPageState extends State<SignInPage> {
     Get.offAll(BottomNavigationBarPage());
   }
 
-  facebookSignInClicked() {
-    showToast(msg: 'Facebook Sign In Clicked!');
-  }
+  // facebookSignInClicked(BuildContext context) {
+  //   showToast(msg: 'Facebook Sign In Clicked!');
+  //   _login();
+  // }
 
-  googleSignInClicked() {
+
+
+  googleSignInClicked() async{
     showToast(msg: 'Google Sign In Clicked!');
+    try{
+      await _googleSignIn.signIn();
+      print(_googleSignIn.currentUser.displayName);
+      print(_googleSignIn.currentUser.photoUrl);
+      print(_googleSignIn.currentUser.id);
+      print(_googleSignIn.currentUser.email);
+
+
+
+    } catch (err){
+      print(err);
+    }
+
   }
 }

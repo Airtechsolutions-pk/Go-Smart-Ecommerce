@@ -7,6 +7,8 @@ class SearchPg extends StatefulWidget {
 
 class _SearchPgState extends State<SearchPg> {
   Future getData() async {
+
+
     var result = FilterArray.FilterArrayData;
     if (result.length != 0) {
       return result;
@@ -110,14 +112,29 @@ class _SearchPgExtraState extends State<SearchPgExtra> {
   final queryController = StreamController<String>();
   Stream<List<SearchData>> filteredStream;
   AsyncMemoizer memoizer = AsyncMemoizer();
-
+  String priceGlobal;
+  String DeliveryGlobal;
+  String TaxGlobal;
+  double Tax;
+  double Totalamount;
   @override
   void initState() {
     super.initState();
+    getDss();
     filteredStream = queryController.stream.asyncMap(_filter);
     queryController.add('');
   }
 
+  getDss() async{
+    final storage = new FlutterSecureStorage();
+
+    priceGlobal = await storage.read(key: "_Currency");
+
+    TaxGlobal = await storage.read(key: "_TaxPercentTaxPercent");
+    print('asda');
+    print(TaxGlobal);
+    DeliveryGlobal = await storage.read(key: "_DeliveryCharges");
+  }
   @override
   Widget build(BuildContext context) {
     // if(FilterArray.FilterArrayData != null){
@@ -164,7 +181,7 @@ class _SearchPgExtraState extends State<SearchPgExtra> {
                         key: UniqueKey(),
                         title: Text(snapshot.data[i].Name),
                         subtitle: Text(
-                            snapshot.data[i].Price.toString(), style: TextStyle(
+                            '$priceGlobal ${snapshot.data[i].Price.toString()}', style: TextStyle(
                           color: kPrimaryColor
                         )
                         ),

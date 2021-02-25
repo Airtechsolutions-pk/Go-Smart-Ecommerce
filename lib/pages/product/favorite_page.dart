@@ -14,12 +14,8 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future<List> dosomestuff() async {
-    //print(WishList.wishlistArray);
-    http.Response res = await http.get(
-      'http://retailapi.airtechsolutions.pk/api/menu/2112',
-    );
 
-    Map<String, dynamic> map = json.decode(res.body);
+    Map<String, dynamic> map = json.decode(globalArray.globalArrayData);
 
     if (map['description'] == "Success") {
       //print('show kr ');

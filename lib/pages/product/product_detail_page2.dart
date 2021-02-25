@@ -26,13 +26,29 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
   var allRows;
   var items = {'Items': []};
   int cartNumber = 0;
+  String priceGlobal;
+  String _DeliveryCharges;
+  String _TaxPercentTaxPercent;
+
   @override
   void initState() {
+    getGlobal();
     setState(() {
       getCartNumber();
     });
   }
 
+
+  getGlobal() async {
+    final storage = new FlutterSecureStorage();
+    priceGlobal = await storage.read(key: "_Currency");
+
+    _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
+    _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
+    setState(() {
+
+    });
+  }
   getCartNumber() async {
     final dbHelper = DatabaseHelper.instance;
 
@@ -53,6 +69,13 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
   Widget build(BuildContext context) {
      //print('//print kara ');
     print(widget.product);
+    print(widget.product['SubCategoryID']);
+
+    print(searchArray.searchArrayData);
+    var data = searchArray.searchArrayData.where((i) => i['SubCategoryID'] == widget.product['SubCategoryID']).toList();
+print(data);
+print(data.length);
+
 
     double stackWidth = MediaQuery.of(context).size.width;
     double stackHeight = MediaQuery.of(context).size.height;
@@ -86,6 +109,40 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
                     // FadeInAnimation(9, child: ReviewCardWidget()),
                     // buildOtherHeading(context),
                     // buildOtherProducts(),
+                    SizedBox(height: 10.0),
+                    SideInAnimation(
+                      2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18.0, vertical: 15.0),
+                        child: Text(
+                          'category.morebestproduct',
+                          style: Theme.of(context).textTheme.headline4,
+                        ).tr(),
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+
+                    Container(
+                        height: MediaQuery.of(context).size.height * 0.35,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount : data.length.clamp(0,6),
+                          itemBuilder: (context, index) {
+                            var product = data[index];
+                            return FadeInAnimation(
+                              index,
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),                      child: ProductCard2(
+                                product: product,
+                                isHorizontalList: false,
+                              )
+                              ),
+                            );
+                          },
+                        )),
                     SizedBox(height: 100.0),
                   ],
                 ),

@@ -9,13 +9,29 @@ class _OrderPageState extends State<OrderPage> {
   bool showCards = false;
   var data;
   var ordersData = [];
-
+  String priceGlobal;
+  String _DeliveryCharges;
+  String _TaxPercentTaxPercent;
   @override
   void initState() {
     this.getOrders();
+    getGlobal();
+
   }
 
 
+
+
+  getGlobal() async {
+    final storage = new FlutterSecureStorage();
+    priceGlobal = await storage.read(key: "_Currency");
+
+    _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
+    _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
+    setState(() {
+
+    });
+  }
 
   getOrders() async{
     final storage = new FlutterSecureStorage();

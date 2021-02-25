@@ -22,7 +22,7 @@ class _ProfileAddressPageState extends State<ProfileAddressPage> {
     String _userEmail = await storage.read(key: "_userEmail");
     String _userPassword = await storage.read(key: "_userPassword");
     String url =
-        'http://retailapi.airtechsolutions.pk/api/customer/login/${_userEmail}/${_userPassword}';
+        'http://retailapi.airtechsolutions.pk/api/customer/login/${_userEmail}/${_userPassword}/0';
 
     //print(url);
     http.Response res = await http.get(

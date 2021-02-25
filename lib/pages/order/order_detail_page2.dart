@@ -11,6 +11,26 @@ class OrderDetailPage2 extends StatefulWidget {
 }
 
 class _OrderDetailPage2State extends State<OrderDetailPage2> {
+  String priceGlobal;
+  String _DeliveryCharges;
+  String _TaxPercentTaxPercent;
+
+  @override
+  void initState() {
+    getGlobal();
+  }
+
+
+  getGlobal() async {
+    final storage = new FlutterSecureStorage();
+    priceGlobal = await storage.read(key: "_Currency");
+
+    _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
+    _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
+    setState(() {
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     print(widget.order);
@@ -38,8 +58,8 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: 100.0,
-                        width: 130,
+                        height: MediaQuery.of(context).size.height * 0.115,
+                        width: MediaQuery.of(context).size.width * 0.435,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
                           border: Border.all(color: Theme.of(context).accentColor),
@@ -53,20 +73,36 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+
                                   Text(
-                                    e['ItemName'].toString(),
+                                    '${e['ItemName'].toString()}',
                                     style: Theme.of(context).textTheme.headline4,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Spacer(),
-                                  Text(
-                                    "$priceGlobal ${e['Price'].toString()}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3
-                                        .copyWith(color: kPrimaryColor),
-                                  ),
+
+                                  Row(
+                                    children:[
+                                      Text(
+                                        "$priceGlobal ${e['Price'].toString()}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            .copyWith(color: kPrimaryColor),
+                                      ),
+                                      Spacer(),
+
+                                      Container(
+                                        child: Text(
+                                          ' x ${e['Quantity'].toString()}',
+                                          style: Theme.of(context).textTheme.headline4.copyWith(color: kPrimaryColor),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ]
+                                  )
                                 ],
                               ),
                             ),
@@ -183,7 +219,12 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                   children: [
                     orderCardItem(context,
                         title: "Items Purchased" + " (${widget.order['OrderDetails'].length})",
-                        data: "PKR ${widget.order['OrderCheckouts']['AmountTotal'].toString()}"),
+                        data: "PKR ${widget.order['OrderCheckouts']['AmountPaid'].toString()}"),
+
+                    SizedBox(height: 12.0),
+                    orderCardItem(context,
+                        title: "Tax",
+                        data: "PKR ${widget.order['OrderCheckouts']['Tax'].toStringAsFixed(2)}"),
                     SizedBox(height: 12.0),
                     // orderCardItem(context,
                     //     title: "order.shipping",

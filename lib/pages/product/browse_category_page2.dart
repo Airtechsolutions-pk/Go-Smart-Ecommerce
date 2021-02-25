@@ -39,7 +39,6 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
     widget.subCategory.forEach((subcategory) {
       items['Items'].addAll(subcategory['Items']);
       Reitems['Items'].addAll(subcategory['Items']);
-
     });
     //print(items);
     //print('sada');
@@ -212,9 +211,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                       topRight:
                                                           const Radius.circular(
                                                               20.0))),
-                                          child: Column(
-
-                                              children: [
+                                          child: Column(children: [
                                             Padding(
                                               padding: EdgeInsets.symmetric(
                                                   vertical: 25.0,
@@ -378,131 +375,153 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                 ],
                                               ),
                                             ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 25.0,
-                                                      horizontal: 18.0),
-                                                  child: Text(
-                                                    'Sort By',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1,
-                                                  ).tr(),
-                                                ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 25.0,
+                                                  horizontal: 18.0),
+                                              child: Text(
+                                                'Sort By',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                              ).tr(),
+                                            ),
                                             Align(
                                               alignment: Alignment.center,
                                               child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center ,//Center Row contents horizontally,
-                                                  crossAxisAlignment: CrossAxisAlignment.center ,//Center Row contents vertically,
-                                                  children:[
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .center, //Center Row contents horizontally,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .center, //Center Row contents vertically,
+                                                  children: [
                                                     GestureDetector(
-                                                        onTap:(){
-                                                          items['Items'].sort((a, b) => b['Name'].compareTo(a['Name']));
+                                                        onTap: () {
+                                                          items['Items'].sort(
+                                                              (a, b) => b[
+                                                                      'Name']
+                                                                  .compareTo(a[
+                                                                      'Name']));
                                                           print('tap');
-                                                          setState(() {
-
-                                                          });
+                                                          setState(() {});
                                                         },
                                                         child: Container(
                                                             decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(3.0),
-
-                                                                border: Border.all(color: kPrimaryColor)
-                                                            ),
-                                                            height: 30, width: 60,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            3.0),
+                                                                border: Border.all(
+                                                                    color:
+                                                                        kPrimaryColor)),
+                                                            height: 30,
+                                                            width: 60,
                                                             child: Center(
                                                                 child: Padding(
                                                                     padding: EdgeInsets.symmetric(
-                                                                        vertical: 3.0,
-                                                                        horizontal: 3.0),
-                                                                    child: Text('A - Z')
-                                                                )
-                                                            )
-                                                        )
-                                                    ),
+                                                                        vertical:
+                                                                            3.0,
+                                                                        horizontal:
+                                                                            3.0),
+                                                                    child: Text(
+                                                                        'A - Z'))))),
                                                     SizedBox(width: 10),
                                                     GestureDetector(
-                                                      onTap:(){
-                                                        items['Items'].sort((a, b) => a['Name'].compareTo(b['Name']));
+                                                      onTap: () {
+                                                        items['Items'].sort(
+                                                            (a, b) => a['Name']
+                                                                .compareTo(
+                                                                    b['Name']));
                                                         print('tap');
-                                                        setState(() {
-
-                                                        });
+                                                        setState(() {});
                                                       },
                                                       child: Container(
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(3.0),
-
-                                                              border: Border.all(color: kPrimaryColor)
-                                                          ),
-                                                          height: 30, width: 60,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          3.0),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      kPrimaryColor)),
+                                                          height: 30,
+                                                          width: 60,
                                                           child: Center(
                                                               child: Padding(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      vertical: 3.0,
-                                                                      horizontal: 3.0),
-                                                                  child: Text('Z - A')
-                                                              )
-                                                          )
-                                                      ),
+                                                                      vertical:
+                                                                          3.0,
+                                                                      horizontal:
+                                                                          3.0),
+                                                                  child: Text(
+                                                                      'Z - A')))),
                                                     ),
                                                     SizedBox(width: 10),
                                                     GestureDetector(
-                                                      onTap:(){
-                                                        items['Items'].sort((a, b) => a['Price'].compareTo(b['Price']));
+                                                      onTap: () {
+                                                        items['Items'].sort(
+                                                            (a, b) => a['Price']
+                                                                .compareTo(b[
+                                                                    'Price']));
                                                         print('tap');
-                                                        setState(() {
-
-                                                        });
+                                                        setState(() {});
                                                       },
                                                       child: Container(
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(3.0),
-
-                                                              border: Border.all(color: kPrimaryColor)
-                                                          ),
-                                                          height: 30, width: 60,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          3.0),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      kPrimaryColor)),
+                                                          height: 30,
+                                                          width: 60,
                                                           child: Center(
                                                               child: Padding(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      vertical: 3.0,
-                                                                      horizontal: 3.0),
-                                                                  child: Text('L - H')
-                                                              )
-                                                          )
-                                                      ),
+                                                                      vertical:
+                                                                          3.0,
+                                                                      horizontal:
+                                                                          3.0),
+                                                                  child: Text(
+                                                                      'L - H')))),
                                                     ),
                                                     SizedBox(width: 10),
                                                     GestureDetector(
-                                                      onTap:(){
-                                                        items['Items'].sort((a, b) => b['Price'].compareTo(a['Price']));
+                                                      onTap: () {
+                                                        items['Items'].sort(
+                                                            (a, b) => b['Price']
+                                                                .compareTo(a[
+                                                                    'Price']));
                                                         print('tap');
-                                                        setState(() {
-
-                                                        });
+                                                        setState(() {});
                                                       },
                                                       child: Container(
                                                           decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(3.0),
-
-                                                              border: Border.all(color: kPrimaryColor)
-                                                          ),
-                                                          height: 30, width: 60,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          3.0),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      kPrimaryColor)),
+                                                          height: 30,
+                                                          width: 60,
                                                           child: Center(
                                                               child: Padding(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      vertical: 3.0,
-                                                                      horizontal: 3.0),
-                                                                  child: Text('H - L')
-                                                              )
-                                                          )
-                                                      ),
+                                                                      vertical:
+                                                                          3.0,
+                                                                      horizontal:
+                                                                          3.0),
+                                                                  child: Text(
+                                                                      'H - L')))),
                                                     )
-                                                  ]
-                                              ),
+                                                  ]),
                                             ),
                                             SizedBox(height: 20),
-
                                             SideInAnimation(
                                               4,
                                               child: Container(
@@ -545,7 +564,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                                 .length;
                                                         i++) {
                                                       var current =
-                                                      Reitems['Items'][i];
+                                                          Reitems['Items'][i];
                                                       if (current['Price'] >=
                                                               ffFirstValue &&
                                                           current['Price'] <=
@@ -569,11 +588,8 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                               [i]);
                                                     }
 
-                                                    print(
-                                                        items['Items']);
-                                                    setState(() {
-
-                                                    });
+                                                    print(items['Items']);
+                                                    setState(() {});
 
                                                     Navigator.of(context).pop();
                                                   },
@@ -619,6 +635,8 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                 padding: EdgeInsets.symmetric(horizontal: 18.0),
                 itemBuilder: (context, index) {
                   var product = items['Items'][index];
+                  var itemList = items['Items'];
+
                   return FadeInAnimation(
                     index,
                     child: ProductCard2(
@@ -638,6 +656,39 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                     )
                   : Container(),
               SizedBox(height: 10.0),
+              SideInAnimation(
+                2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 18.0, vertical: 15.0),
+                  child: Text(
+                    'category.morebestproduct',
+                    style: Theme.of(context).textTheme.headline4,
+                  ).tr(),
+                ),
+              ),
+              SizedBox(height: 10.0),
+
+              Container(
+                height: MediaQuery.of(context).size.height * 0.35,
+                  child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                      itemCount : items['Items'].length.clamp(0,6),
+                itemBuilder: (context, index) {
+                  var product = items['Items'][index];
+                  return FadeInAnimation(
+                    index,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0),                      child: ProductCard2(
+                        product: product,
+                        isHorizontalList: false,
+                      )
+                    ),
+                  );
+                },
+              ))
             ],
           ),
         ),
