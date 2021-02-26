@@ -180,7 +180,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       style: Theme.of(context).textTheme.bodyText2,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        hintText: tr('product.hinttextfullname'),
+                        hintText: tr('Please fill your address'),
                         hintStyle: Theme.of(context).textTheme.subtitle2,
                         prefixIcon: Icon(FlutterIcons.location_pin_sli),
                         enabledBorder: OutlineInputBorder(

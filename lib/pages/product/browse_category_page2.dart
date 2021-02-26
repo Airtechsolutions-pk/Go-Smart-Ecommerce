@@ -58,7 +58,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              Get.to(SearchPg());
+              Get.to(SearchPgExtra());
             },
           ),
         ],
