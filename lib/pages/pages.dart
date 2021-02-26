@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:async';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
@@ -49,6 +51,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:path/path.dart';
@@ -76,6 +79,7 @@ part 'order/address_page.dart';
 part 'order/cart_page.dart';
 part 'order/order_detail_page.dart';
 part 'order/order_detail_page2.dart';
+part 'order/map.dart';
 
 part 'order/order_page.dart';
 part 'order/payment_page.dart';

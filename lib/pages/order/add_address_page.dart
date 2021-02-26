@@ -36,12 +36,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return Center(
-                  child: const SpinKitWave(color: kPrimaryColor, type: SpinKitWaveType.center));
+                  child: const SpinKitWave(
+                      color: kPrimaryColor, type: SpinKitWaveType.center));
             });
-
-
-
-
 
         Map<String, dynamic> body = {
           "CustomerAddressID": 0,
@@ -59,10 +56,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
         final headers = {'Content-Type': 'application/json'};
 
         //print(jsonBody);
-        http.Response  res = await http.post(
+        http.Response res = await http.post(
           'http://retailapi.airtechsolutions.pk/api/customer/address/addorupdate',
           headers: headers,
-
           body: jsonBody,
         );
         var data = json.decode(res.body.toString());
@@ -71,7 +67,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
         if (data['description'] == "Your addresses updated successfully.") {
           Navigator.pop(context);
           Get.to(AddressPage());
-
         } else {
           Navigator.pop(context);
         }
@@ -180,6 +175,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       style: Theme.of(context).textTheme.bodyText2,
                       autocorrect: false,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.map_outlined,
+                          ),
+                          onPressed: () {
+                            Get.to(MapSample());
+                          },
+                        ),
                         hintText: tr('Please fill your address'),
                         hintStyle: Theme.of(context).textTheme.subtitle2,
                         prefixIcon: Icon(FlutterIcons.location_pin_sli),

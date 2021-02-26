@@ -38,17 +38,15 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
     });
   }
 
-
   getGlobal() async {
     final storage = new FlutterSecureStorage();
     priceGlobal = await storage.read(key: "_Currency");
 
     _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
     _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   getCartNumber() async {
     final dbHelper = DatabaseHelper.instance;
 
@@ -67,15 +65,16 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
 
   @override
   Widget build(BuildContext context) {
-     //print('//print kara ');
+    //print('//print kara ');
     print(widget.product);
     print(widget.product['SubCategoryID']);
 
     print(searchArray.searchArrayData);
-    var data = searchArray.searchArrayData.where((i) => i['SubCategoryID'] == widget.product['SubCategoryID']).toList();
-print(data);
-print(data.length);
-
+    var data = searchArray.searchArrayData
+        .where((i) => i['SubCategoryID'] == widget.product['SubCategoryID'])
+        .toList();
+    print(data);
+    print(data.length);
 
     double stackWidth = MediaQuery.of(context).size.width;
     double stackHeight = MediaQuery.of(context).size.height;
@@ -128,18 +127,18 @@ print(data.length);
                         child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount : data.length.clamp(0,6),
+                          itemCount: data.length.clamp(0, 6),
                           itemBuilder: (context, index) {
                             var product = data[index];
                             return FadeInAnimation(
                               index,
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),                      child: ProductCard2(
-                                product: product,
-                                isHorizontalList: false,
-                              )
-                              ),
+                                      horizontal: 10.0),
+                                  child: ProductCard2(
+                                    product: product,
+                                    isHorizontalList: false,
+                                  )),
                             );
                           },
                         )),
@@ -164,7 +163,7 @@ print(data.length);
           cart.price = widget.product['Price'].toString();
           cart.color = selectedColor;
           cart.sizeselect = selectedSize;
-          cart.quantity= 1;
+          cart.quantity = 1;
           //print(cart);
 
           final dbHelper = DatabaseHelper.instance;
@@ -514,11 +513,9 @@ print(data.length);
               onTap: () {
                 Share.share(
                   "Product Name: ${widget.product['Name']} \nProduct Price: ${widget.product['Price']}"
-                      "\nProduct Description: ${widget.product['Description']}"
-                      "\n${widget.product['ItemImages'][selectedImage]}",
+                  "\nProduct Description: ${widget.product['Description']}"
+                  "\n${widget.product['ItemImages'][selectedImage]}",
                 );
-
-
               },
               child: Icon(
                 Icons.share_outlined,
@@ -574,27 +571,26 @@ print(data.length);
         });
       },
       child: AnimatedContainer(
-        duration: Duration(seconds: 1),
-        margin: EdgeInsets.only(right: 10),
-        height: stackHeight * 0.07,
-        width: stackWidth * 0.15,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15.0),
-          child: CachedNetworkImage(
-          
-          imageUrl: widget.product['ItemImages'][index],
-          width: double.infinity,
-          fit: BoxFit.fitWidth,
-          height: 250.0,
-        ),
-      )
-        ),
+          duration: Duration(seconds: 1),
+          margin: EdgeInsets.only(right: 10),
+          height: stackHeight * 0.07,
+          width: stackWidth * 0.15,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color:
+                    kPrimaryColor.withOpacity(selectedImage == index ? 1 : 0)),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: CachedNetworkImage(
+              imageUrl: widget.product['ItemImages'][index],
+              width: double.infinity,
+              fit: BoxFit.fitWidth,
+              height: 250.0,
+            ),
+          )),
     );
   }
 }
