@@ -1,39 +1,39 @@
 part of '../pages.dart';
 
-
 class ProfileDetailPage extends StatefulWidget {
   @override
   _ProfileDetailPageState createState() => _ProfileDetailPageState();
 }
 
 class _ProfileDetailPageState extends State<ProfileDetailPage> {
- bool showData = true;
- String name = "Loading";
- String email = "Loading";
+  bool showData = true;
+  String name = "Loading";
+  String email = "Loading";
 
- String gender = "Loading";
+  String gender = "Loading";
+  String _userID;
+  String phonenumber = "Loading";
 
- String phonenumber = "Loading";
+  String password = "Loading";
 
- String password = "Loading";
-
- @override
+  @override
   void initState() {
     setState(() {
       getAddress();
     });
   }
 
-
   getAddress() async {
     final storage = new FlutterSecureStorage();
 
     String _userEmail = await storage.read(key: "_userEmail");
     String _userPassword = await storage.read(key: "_userPassword");
-    String url =
-        'http://retailapi.airtechsolutions.pk/api/customer/login/${_userEmail}/${_userPassword}/0';
+    String _userID = await storage.read(key: "_userID");
 
-    //print(url);
+    String url =
+        'http://retailapi.airtechsolutions.pk/api/customer/login/${_userID}';
+
+    print(url);
     http.Response res = await http.get(
       url,
     );
@@ -41,26 +41,22 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
     //print(data);
 
     if (data['description'].toString() == "Success") {
+      setState(() {
+        showData = true;
+        //print(data['customer']);
 
-setState(() {
-  showData = true;
-  //print(data['customer']);
+        name = data['customer']['FullName'];
+        //print(name);
+        email = data['customer']['Email'];
 
-  name = data['customer']['FullName'];
-  //print(name);
-  email = data['customer']['Email'];
+        gender = "Male";
 
-  gender = "Male";
+        phonenumber = data['customer']['Mobile'];
 
-  phonenumber = data['customer']['Mobile'];
-
-  password = data['customer']['Password'];
-});
-
-
+        password = data['customer']['Password'];
+      });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +70,7 @@ setState(() {
               SideInAnimation(
                 1,
                 child: ListTile(
-                  leading:               SizedBox(width: 7),
-
+                  leading: SizedBox(width: 7),
                   title: GestureDetector(
                     onTap: () {
                       Get.to(ChangeNamePage());
@@ -111,7 +106,10 @@ setState(() {
         icon: FlutterIcons.lock1_ant,
         title: 'profile.changepassword',
         subtitle: showData ? password.toString() : '•••••••••••••',
-        onTap: () => Get.to(_ChangePasswordPage(email: email.toString(), phone: phonenumber.toString(), passwrd: password.toString())),
+        onTap: () => Get.to(_ChangePasswordPage(
+            email: email.toString(),
+            phone: phonenumber.toString(),
+            passwrd: password.toString())),
       ),
     );
   }
@@ -124,7 +122,10 @@ setState(() {
         icon: FlutterIcons.smartphone_fea,
         title: 'profile.phonenumber',
         subtitle: showData ? phonenumber.toString() : '+62870717071',
-        onTap: () => Get.to(ChangePhonePage(email: email.toString(), phone: phonenumber.toString(), passwrd: password.toString())),
+        onTap: () => Get.to(ChangePhonePage(
+            email: email.toString(),
+            phone: phonenumber.toString(),
+            passwrd: password.toString())),
       ),
     );
   }
@@ -137,7 +138,10 @@ setState(() {
         icon: FlutterIcons.mail_ant,
         title: 'profile.emailaddress',
         subtitle: showData ? email.toString() : 'jscvrnd19@gmail.com',
-        onTap: () => Get.to(ChangeEmailPage(email: email.toString(), phone: phonenumber.toString(), passwrd: password.toString())),
+        onTap: () => Get.to(ChangeEmailPage(
+            email: email.toString(),
+            phone: phonenumber.toString(),
+            passwrd: password.toString())),
       ),
     );
   }
@@ -148,9 +152,12 @@ setState(() {
       child: _customListTile(
         context,
         icon: FlutterIcons.gender_female_mco,
-        title:  'profile.gender',
+        title: 'profile.gender',
         subtitle: showData ? gender.toString() : tr('profile.female'),
-        onTap: () => Get.to(ChangePhonePage(email: email.toString(), phone: phonenumber.toString(), passwrd: password.toString())),
+        onTap: () => Get.to(ChangePhonePage(
+            email: email.toString(),
+            phone: phonenumber.toString(),
+            passwrd: password.toString())),
       ),
     );
   }
@@ -209,11 +216,18 @@ setState(() {
           Text(
             title,
             style: Theme.of(context).textTheme.bodyText2,
+            overflow: TextOverflow.ellipsis,
           ).tr(),
-          Text(
-            subtitle,
-            style: Theme.of(context).textTheme.subtitle2,
-          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.3,
+            child: Text(
+              subtitle,
+              style: Theme.of(context).textTheme.subtitle2,
+              overflow: TextOverflow.fade,
+              maxLines: 1,
+              softWrap: false,
+            ),
+          )
         ],
       ),
       trailing: Icon(

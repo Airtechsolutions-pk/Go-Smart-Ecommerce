@@ -6,6 +6,9 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
+  BitmapDescriptor pinLocationIcon;
+  Set<Marker> _markers = {};
+  Completer<GoogleMapController> _controller = Completer();
   var address = {'Address': []};
   bool showAddress = false;
   int dateindex;
@@ -29,6 +32,7 @@ class _AddressPageState extends State<AddressPage> {
       getGlobal();
     });
   }
+
   getGlobal() async {
     final storage = new FlutterSecureStorage();
     priceGlobal = await storage.read(key: "_Currency");
@@ -37,10 +41,9 @@ class _AddressPageState extends State<AddressPage> {
 
     TaxGlobal = await storage.read(key: "_TaxPercentTaxPercent");
     DeliveryGlobal = await storage.read(key: "_DeliveryCharges");
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   void _query() async {
     //print('cart');
     final dbHelper = DatabaseHelper.instance;
@@ -55,20 +58,24 @@ class _AddressPageState extends State<AddressPage> {
         "Price": row['price'],
         "Cost": 0,
         "StatusID": 1,
-        "OrderDetailModifiers": [
+        "OrderModifierDetails": [
           {
-            "ModifierID": 0,
-            "ModifierName": row['color'],
+            "ModifierID": row['modifierID'],
+            "VariantID": 0,
+            "ModifierName": row['modifier'],
             "Quantity": 0,
-            "Price": 0,
+            "Price": row['modifierPrice'],
+            "Type": 'Modifier',
             "Cost": 0,
             "StatusID": 1
           },
           {
             "ModifierID": 0,
-            "ModifierName": row['sizeselect'],
+            "VariantID": row['variantID'],
+            "VariantName": row['variant'],
             "Quantity": 0,
-            "Price": 0,
+            "Price": row['variantPrice'],
+            "Type": 'Variant',
             "Cost": 0,
             "StatusID": 1
           }
@@ -86,10 +93,17 @@ class _AddressPageState extends State<AddressPage> {
 
     String _userEmail = await storage.read(key: "_userEmail");
     String _userPassword = await storage.read(key: "_userPassword");
-    String url =
-        'http://retailapi.airtechsolutions.pk/api/customer/login/${_userEmail}/${_userPassword}/0';
+    String _userID = await storage.read(key: "_userID");
 
-    //print(url);
+    if (_userPassword == "") {
+      setState(() {
+        _userPassword = 'null';
+      });
+    }
+    String url =
+        'http://retailapi.airtechsolutions.pk/api/customer/login/${_userID}';
+
+    print(url);
     http.Response res = await http.get(
       url,
     );
@@ -135,7 +149,6 @@ class _AddressPageState extends State<AddressPage> {
       if (dateindex != null) {
         final storage = new FlutterSecureStorage();
 
-
         double Tax = int.parse(TaxGlobal) / 100 * amount;
 
         Map<String, dynamic> body = {
@@ -145,7 +158,6 @@ class _AddressPageState extends State<AddressPage> {
           "StatusID": 2,
           "LocationID": _LocationID,
           "UserID": _UserID,
-
           "CustomerOrders": {
             "Name": addressSelected['NickName'],
             "Email": "notavailable@mail.com",
@@ -161,7 +173,7 @@ class _AddressPageState extends State<AddressPage> {
           "OrderCheckouts": {
             "PaymentMode": 1,
             "AmountPaid": amount,
-            "AmountTotal": amount + int.parse(DeliveryGlobal) + Tax ,
+            "AmountTotal": amount + int.parse(DeliveryGlobal) + Tax,
             "ServiceCharges": int.parse(DeliveryGlobal),
             "GrandTotal": 0,
             "Tax": Tax,
@@ -188,7 +200,7 @@ class _AddressPageState extends State<AddressPage> {
           Navigator.pop(context);
           final dbHelper = DatabaseHelper.instance;
           await dbHelper.deleteAll();
-          showAlert(context, data['OrderID'] );
+          showAlert(context, data['OrderID']);
 
           // Get.to(BottomNavigationBarPage());
         } else {
@@ -233,101 +245,96 @@ class _AddressPageState extends State<AddressPage> {
                             scrollDirection: Axis.vertical,
                             physics: ScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return SideInAnimation(
-                                index,
-                                child: GestureDetector(
-                                  // onTap: widget.onPressed,
-                                  onTap: () {
-                                    setState(() {
-                                      dateindex = index;
-                                      addressSelected =
-                                          address['Address'][index];
-                                      print(addressSelected);
-                                    });
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.all(15.0),
-                                    margin: EdgeInsets.only(bottom: 15.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: dateindex == index
-                                            ? Theme.of(context).primaryColor
-                                            : Theme.of(context).accentColor,
-                                        width: dateindex == index ? 2.0 : 1.0,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            showAddress
-                                                ? address['Address'][index]
-                                                    ['Address']
-                                                : '...',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline4),
-                                        SizedBox(height: 8.0),
-                                        Text(
-                                            showAddress
-                                                ? address['Address'][index]
-                                                    ['StreetName']
-                                                : '...',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1),
-                                        SizedBox(height: 8.0),
-                                        Text(
-                                            showAddress
-                                                ? address['Address'][index]
-                                                    ['NickName']
-                                                : '...',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1),
-                                        SizedBox(height: 8.0),
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(Icons.edit_outlined),
-                                              onPressed: () {
-                                                Get.to(EditAddressPage(
-                                                    address: address['Address']
-                                                        [index]));
-                                              },
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: SideInAnimation(
+                                  index,
+                                  child: GestureDetector(
+                                    // onTap: widget.onPressed,
+                                    onTap: () {
+                                      setState(() {
+                                        dateindex = index;
+                                        addressSelected =
+                                            address['Address'][index];
+                                        print(addressSelected);
+                                      });
+                                    },
+                                    child: Stack(
+                                      children:[
+                                        Container(
+                                          width: double.infinity,
+                                          padding: EdgeInsets.all(15.0),
+                                          margin: EdgeInsets.only(bottom: 15.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12.0),
+                                            border: Border.all(
+                                              color: dateindex == index
+                                                  ? Theme.of(context).primaryColor
+                                                  : Theme.of(context).accentColor,
+                                              width: dateindex == index ? 2.0 : 1.0,
                                             ),
-                                            // SizedBox(
-                                            //   width: 80.0,
-                                            //   child: RaisedButtonWidget(
-                                            //     title: 'product.edit',
-                                            //     onPressed: () {
-                                            //       Get.to(EditAddressPage(
-                                            //           address:
-                                            //               address['Address']
-                                            //                   [index]));
-                                            //       // Navigator.push(context, MaterialPageRoute(builder: (context) => EditAddressPage(address: address['Address'][index]))).then((value) {
-                                            //       //   if (value == true) {
-                                            //       //     setState(() {
-                                            //       //     });
-                                            //       //   }
-                                            //       // });
-                                            //       // Navigator.push(context, EditAddressPage(address: address['Address'][index])).then((result) => setState(() {}));
-                                            //     },
-                                            //   ),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  showAddress
+                                                      ? address['Address'][index]
+                                                  ['Address']
+                                                      : '...',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4),
+                                              SizedBox(height: 8.0),
+                                              Text(
+                                                  showAddress
+                                                      ? address['Address'][index]
+                                                  ['StreetName']
+                                                      : '...',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline5),
 
-                                            SizedBox(width: 15.0),
-                                            IconButton(
-                                              icon: Icon(Icons.delete_outline),
-                                              onPressed: () {
-                                                // showDeleteConfirmation(context);
-                                              },
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 5.0,
+                                          bottom: 0.0,
+                                          child:
+                                          Row(
+                                            children: [
+                                              ClipOval(
+                                                child: Material(
+                                                  color: kPrimaryColor, // button color
+                                                  child: InkWell(
+                                                    splashColor: Colors.red, // inkwell color
+                                                    child: SizedBox(width: 30, height: 30, child: Icon(Icons.edit_outlined, color: Colors.white, size: 18)),
+                                                    onTap: () {
+                                                      Get.to(EditAddressPage(
+                                                          address: address['Address']
+                                                          [index]));
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5.0),
+                                              ClipOval(
+                                                child: Material(
+                                                  color: kErrorLightColor, // button color
+                                                  child: InkWell(
+                                                    splashColor: Colors.red, // inkwell color
+                                                    child: SizedBox(width: 30, height: 30, child: Icon(Icons.delete_outline,  color: Colors.white, size: 18)),
+                                                    onTap: () {},
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
                                         )
-                                      ],
+                                      ]
                                     ),
                                   ),
                                 ),
@@ -376,7 +383,7 @@ class _AddressPageState extends State<AddressPage> {
                       child: FadeInAnimation(
                         2,
                         child: RaisedButtonWidget(
-                          title: 'order.next',
+                          title: 'Confirm To Proceed',
                           onPressed: () {
                             onClick();
                           },
@@ -433,10 +440,10 @@ class _AddressPageState extends State<AddressPage> {
                     color: Colors.white,
                     padding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 18.0),
-                    height: height * 0.53,
+                    height: height * 0.56,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center ,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
@@ -461,20 +468,25 @@ class _AddressPageState extends State<AddressPage> {
                                 ).tr(),
                                 SizedBox(height: 20),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center ,//Center Row contents horizontally,
-                                  crossAxisAlignment: CrossAxisAlignment.center, //Center Row contents vertically,
-                                    children:[
-                                  Text(
-                                    'Order # ',
-                                    style: Theme.of(context).textTheme.bodyText2,
-                                    textAlign: TextAlign.center,
-                                  ).tr(),
-                                  Text(
-                                    '${orderID}',
-                                    style: Theme.of(context).textTheme.headline1,
-                                  ).tr(),
-                                ]),
-
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .center, //Center Row contents horizontally,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center, //Center Row contents vertically,
+                                    children: [
+                                      Text(
+                                        'Order # ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
+                                        textAlign: TextAlign.center,
+                                      ).tr(),
+                                      Text(
+                                        '${orderID}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline1,
+                                      ).tr(),
+                                    ]),
                                 SizedBox(height: 12.0),
                                 Text(
                                   'order.subtitlesuccess',

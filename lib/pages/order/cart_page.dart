@@ -29,22 +29,18 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     this._query();
-
   }
-
-
-
 
   void _query() async {
     amount = 0;
     final storage = new FlutterSecureStorage();
 
-      priceGlobal = await storage.read(key: "_Currency");
+    priceGlobal = await storage.read(key: "_Currency");
 
-      TaxGlobal = await storage.read(key: "_TaxPercentTaxPercent");
-      print('asda');
-      print(TaxGlobal);
-      DeliveryGlobal = await storage.read(key: "_DeliveryCharges");
+    TaxGlobal = await storage.read(key: "_TaxPercentTaxPercent");
+    print('asda');
+    print(TaxGlobal);
+    DeliveryGlobal = await storage.read(key: "_DeliveryCharges");
     //print('cart');
     final dbHelper = DatabaseHelper.instance;
 
@@ -60,18 +56,14 @@ class _CartPageState extends State<CartPage> {
     if (allRows.length == 0) {
       showCart = false;
     } else {
-
       showCart = true;
       print('adssadadsa');
       print(TaxGlobal);
-       Tax = int.parse(TaxGlobal) / 100 * amount;
+      Tax = int.parse(TaxGlobal) / 100 * amount;
       print(Tax);
       Totalamount = amount + Tax + int.parse(DeliveryGlobal);
       print(Totalamount);
       setState(() {});
-
-
-
     }
 
     setState(() {});
@@ -121,7 +113,6 @@ class _CartPageState extends State<CartPage> {
                                           .subtitle1),
                                 ],
                               ),
-
                               SizedBox(height: 12.0),
                               Row(
                                 mainAxisAlignment:
@@ -141,12 +132,12 @@ class _CartPageState extends State<CartPage> {
                               SizedBox(height: 12.0),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('order.shipping',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2)
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2)
                                       .tr(),
                                   Text('$priceGlobal $DeliveryGlobal',
                                       style: Theme.of(context)
@@ -288,30 +279,29 @@ class _CartPageState extends State<CartPage> {
                   : Container(),
               SizedBox(height: 20.0),
               showCart
-                  ?  Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: TextField(
-                  decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: TextField(
+                        decoration: new InputDecoration(
+                          border: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide: new BorderSide(color: kPrimaryColor)),
+                          enabledBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide: new BorderSide(color: kPrimaryColor)),
+                          focusedBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide: new BorderSide(color: kPrimaryColor)),
+                          hintText: 'Special instruction',
+                        ),
 
-                        borderSide: new BorderSide(color: kPrimaryColor)),
-                    enabledBorder: new OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-
-                        borderSide: new BorderSide(color: kPrimaryColor)),
-                    focusedBorder: new OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-
-                        borderSide: new BorderSide(color: kPrimaryColor)),
-                    hintText: 'Special instruction',
-                  ),
-
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1, //Normal textInputField will be displayed
-                  maxLines: 5, // when user presses enter it will adapt to it
-                ),
-              ) : Container(),
+                        keyboardType: TextInputType.multiline,
+                        minLines: 1, //Normal textInputField will be displayed
+                        maxLines:
+                            5, // when user presses enter it will adapt to it
+                      ),
+                    )
+                  : Container(),
               SizedBox(height: 20.0),
               showCart ? buildCheckoutButton() : Container(),
               SizedBox(height: 20.0),
@@ -497,7 +487,7 @@ class _CartPageState extends State<CartPage> {
               margin: EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
                 width: double.infinity,
-                height: 120.0,
+                height: 130.0,
                 padding: EdgeInsets.all(12.0),
                 child: Row(
                   children: [
@@ -552,6 +542,23 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                     )
                                   ],
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${items['Items'][index]['variant']} | ${items['Items'][index]['modifier']}',
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
+                                ),
+                                SizedBox(width: 5.0),
+                                Row(
+                                  children: [],
                                 )
                               ],
                             ),

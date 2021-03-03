@@ -11,7 +11,7 @@ class ReviewCardWidget extends StatelessWidget {
             leading: CircleAvatar(
               radius: 25.0,
               backgroundImage: CachedNetworkImageProvider(
-                'https://i.pinimg.com/564x/f7/2b/06/f72b06c3e58ef849ca248918e258c129.jpg',
+                'https://via.placeholder.com/1000',
               ),
             ),
             title: Text(

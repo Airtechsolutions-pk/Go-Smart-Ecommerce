@@ -1,6 +1,5 @@
 part of '../pages.dart';
 
-
 class OrderDetailPage2 extends StatefulWidget {
   final order;
 
@@ -20,17 +19,15 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
     getGlobal();
   }
 
-
   getGlobal() async {
     final storage = new FlutterSecureStorage();
     priceGlobal = await storage.read(key: "_Currency");
 
     _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
     _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     print(widget.order);
@@ -38,8 +35,7 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title:
-        Text('Order Details', style: theme.textTheme.headline3).tr(),
+        title: Text('Order Details', style: theme.textTheme.headline3).tr(),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -52,17 +48,17 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
               SizedBox(height: 12.0),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-
                 child: Row(
                   children: widget.order['OrderDetails'].map<Widget>((e) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.115,
-                        width: MediaQuery.of(context).size.width * 0.435,
+                        height: MediaQuery.of(context).size.height * 0.165,
+                        width: MediaQuery.of(context).size.width * 0.5,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          border: Border.all(color: Theme.of(context).accentColor),
+                          border:
+                              Border.all(color: Theme.of(context).accentColor),
                         ),
                         padding: EdgeInsets.all(12.0),
                         margin: EdgeInsets.only(bottom: 8.0),
@@ -73,51 +69,56 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Text(
                                     '${e['ItemName'].toString()}',
-                                    style: Theme.of(context).textTheme.headline4,
+                                    style:
+                                        Theme.of(context).textTheme.headline4,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Spacer(),
-
-                                  Row(
-                                    children:[
-                                      Text(
-                                        "$priceGlobal ${e['Price'].toString()}",
+                                  Text(
+                                    '${e['OrderModifierDetails'][0]['ModifierName'].toString()} | ${e['OrderModifierDetails'][1]['VariantName'].toString()}',
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Spacer(),
+                                  Row(children: [
+                                    Text(
+                                      "$priceGlobal ${e['Price'].toString()}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3
+                                          .copyWith(color: kPrimaryColor),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      child: Text(
+                                        ' x ${e['Quantity'].toString()}',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline3
+                                            .headline4
                                             .copyWith(color: kPrimaryColor),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      Spacer(),
-
-                                      Container(
-                                        child: Text(
-                                          ' x ${e['Quantity'].toString()}',
-                                          style: Theme.of(context).textTheme.headline4.copyWith(color: kPrimaryColor),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ]
-                                  )
+                                    ),
+                                  ])
                                 ],
                               ),
                             ),
-
                           ],
                         ),
                       ),
                     );
-
                   }).toList(),
                 ),
               ),
               SizedBox(height: 15.0),
               Text('Customer Details',
-                  style: Theme.of(context).textTheme.headline3)
+                      style: Theme.of(context).textTheme.headline3)
                   .tr(),
               SizedBox(height: 12.0),
               Container(
@@ -127,31 +128,32 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                   border: Border.all(color: Theme.of(context).accentColor),
                 ),
                 padding: EdgeInsets.all(12.0),
-                child: Column(
-                    children: [
-                      orderCardItem(context,
-                          title: "Customer Name",
-                          data: widget.order['CustomerOrders']['Name'].toString()),
-                      SizedBox(height: 12.0),
-                      // orderCardItem(context,
-                      //     title: "order.shipping",
-                      //     data: "\$ ${order.shippingPrice}"),
-                      // SizedBox(height: 12.0),
-                      orderCardItem(context,
-                          title: "Customer Address",
-                          data: widget.order['CustomerOrders']['Address'].toString()),
-                      SizedBox(height: 12.0),
-                      orderCardItem(context,
-                          title: "Customer Mobile",
-                          data: widget.order['CustomerOrders']['Mobile'].toString()),
-                      SizedBox(height: 4.0),
-                    ]),
+                child: Column(children: [
+                  orderCardItem(context,
+                      title: "Customer Name",
+                      data: widget.order['CustomerOrders']['Name'].toString()),
+                  SizedBox(height: 12.0),
+                  // orderCardItem(context,
+                  //     title: "order.shipping",
+                  //     data: "\$ ${order.shippingPrice}"),
+                  // SizedBox(height: 12.0),
+                  orderCardItem(context,
+                      title: "Customer Address",
+                      data:
+                          widget.order['CustomerOrders']['Address'].toString()),
+                  SizedBox(height: 12.0),
+                  orderCardItem(context,
+                      title: "Customer Mobile",
+                      data:
+                          widget.order['CustomerOrders']['Mobile'].toString()),
+                  SizedBox(height: 4.0),
+                ]),
               ),
               SizedBox(height: 15.0),
 
               SizedBox(height: 15.0),
               Text('Order Details',
-                  style: Theme.of(context).textTheme.headline3)
+                      style: Theme.of(context).textTheme.headline3)
                   .tr(),
               SizedBox(height: 12.0),
               Container(
@@ -161,21 +163,18 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                   border: Border.all(color: Theme.of(context).accentColor),
                 ),
                 padding: EdgeInsets.all(12.0),
-                child: Column(
-                  children: [
-                    orderCardItem(context,
-                        title: "Order No",
-                        data: widget.order['ID'].toString()),
-                    SizedBox(height: 12.0),
-                    // orderCardItem(context,
-                    //     title: "order.shipping",
-                    //     data: "\$ ${order.shippingPrice}"),
-                    // SizedBox(height: 12.0),
-                orderCardItem(context,
-                    title: "Order Date",
-                    data: widget.order['OrderDate'].toString()),
-                SizedBox(height: 4.0),
-
+                child: Column(children: [
+                  orderCardItem(context,
+                      title: "Order No", data: widget.order['ID'].toString()),
+                  SizedBox(height: 12.0),
+                  // orderCardItem(context,
+                  //     title: "order.shipping",
+                  //     data: "\$ ${order.shippingPrice}"),
+                  // SizedBox(height: 12.0),
+                  orderCardItem(context,
+                      title: "Order Date",
+                      data: widget.order['OrderDate'].toString()),
+                  SizedBox(height: 4.0),
                 ]),
               ),
               SizedBox(height: 15.0),
@@ -205,7 +204,7 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
               // ),
               // SizedBox(height: 15.0),
               Text('Payment Details',
-                  style: Theme.of(context).textTheme.headline3)
+                      style: Theme.of(context).textTheme.headline3)
                   .tr(),
               SizedBox(height: 12.0),
               Container(
@@ -218,13 +217,16 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                 child: Column(
                   children: [
                     orderCardItem(context,
-                        title: "Items Purchased" + " (${widget.order['OrderDetails'].length})",
-                        data: "PKR ${widget.order['OrderCheckouts']['AmountPaid'].toString()}"),
+                        title: "Items Purchased" +
+                            " (${widget.order['OrderDetails'].length})",
+                        data:
+                            "PKR ${widget.order['OrderCheckouts']['AmountPaid'].toString()}"),
 
                     SizedBox(height: 12.0),
                     orderCardItem(context,
                         title: "Tax",
-                        data: "PKR ${widget.order['OrderCheckouts']['Tax'].toStringAsFixed(2)}"),
+                        data:
+                            "PKR ${widget.order['OrderCheckouts']['Tax'].toStringAsFixed(2)}"),
                     SizedBox(height: 12.0),
                     // orderCardItem(context,
                     //     title: "order.shipping",
@@ -232,11 +234,13 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                     // SizedBox(height: 12.0),
                     orderCardItem(context,
                         title: "Shipping Charges",
-                        data: "PKR ${widget.order['OrderCheckouts']['ServiceCharges'].toString()}"),
+                        data:
+                            "PKR ${widget.order['OrderCheckouts']['ServiceCharges'].toString()}"),
                     SizedBox(height: 12.0),
                     priceItem(context,
                         title: "Total Price",
-                        data: "PKR ${widget.order['OrderCheckouts']['AmountTotal'].toString()}"),
+                        data:
+                            "PKR ${widget.order['OrderCheckouts']['AmountTotal'].toString()}"),
                   ],
                 ),
               ),
@@ -315,8 +319,8 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
         SizedBox(width: 60.0),
         Expanded(
           child: Text(data,
-              textAlign: TextAlign.right,
-              style: Theme.of(context).textTheme.subtitle2)
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.subtitle2)
               .tr(),
         ),
       ],

@@ -1,14 +1,8 @@
 import 'dart:io';
 
-import 'package:scoped_model/scoped_model.dart';
-import 'package:sqflite/sqflite.dart';
-
-import 'dart:io';
-
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'package:localstorage/localstorage.dart';
+import 'package:sqflite/sqflite.dart';
 
 class Cart {
   int uId;
@@ -17,8 +11,14 @@ class Cart {
   String title;
   String image;
   String price;
-  String color;
-  String sizeselect;
+  String variant;
+  String modifier;
+  int modifierID;
+  int variantID;
+  String modifierPrice;
+  String variantPrice;
+  String variantType;
+  String modifierType;
 
   Cart({
     this.id,
@@ -26,9 +26,15 @@ class Cart {
     this.title,
     this.image,
     this.price,
-    this.color,
-    this.sizeselect,
+    this.variant,
+    this.modifier,
     this.quantity,
+    this.modifierID,
+    this.variantID,
+    this.modifierPrice,
+    this.variantPrice,
+    this.variantType,
+    this.modifierType,
   });
 
   factory Cart.fromJson(Map<String, dynamic> data) => new Cart(
@@ -38,8 +44,14 @@ class Cart {
         title: data["title"],
         image: data["image"],
         price: data["price"],
-        color: data["color"],
-        sizeselect: data["sizeselect"],
+        variant: data["variant"],
+        modifier: data["modifier"],
+        variantID: data["variantID"],
+        modifierID: data["modifierID"],
+        variantPrice: data["variantPrice"],
+        modifierPrice: data["modifierPrice"],
+        variantType: data["variantType"],
+        modifierType: data["modifierType"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,17 +60,23 @@ class Cart {
         "title": title,
         "image": image,
         "price": price,
-        "color": color,
-        "sizeselect": sizeselect,
+        "variant": variant,
+        "modifier": modifier,
         "quantity": quantity,
+        "variantID": variantID,
+        "modifierID": modifierID,
+        "variantPrice": variantPrice,
+        "modifierPrice": modifierPrice,
+        "variantType": variantType,
+        "modifierType": modifierType,
       };
 }
 
 class DatabaseHelper {
-  static final _databaseName = "CartDatabase.db";
+  static final _databaseName = "CartDatabase4.db";
   static final _databaseVersion = 1;
 
-  static final table = 'cart_table_new';
+  static final table = 'cart_table_new4';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -89,9 +107,15 @@ class DatabaseHelper {
         "quantity INTEGER,"
         "title TEXT,"
         "image TEXT,"
-        "color TEXT,"
+        "variant TEXT,"
         "price TEXT,"
-        "sizeselect TEXT"
+        "modifier TEXT,"
+        "variantID INTEGER,"
+        "modifierID INTEGER,"
+        "variantPrice TEXT,"
+        "modifierPrice TEXT,"
+        "variantType TEXT,"
+        "modifierType TEXT"
         ")");
   }
 
@@ -118,6 +142,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     return await db.delete(table, where: '$columnId = uId');
   }
+
   Future<int> updateCustomer(int id, columnId, quantity) async {
     print(columnId);
     print(id);
@@ -126,9 +151,9 @@ class DatabaseHelper {
     Database db = await instance.database;
 
     return await db.rawUpdate(
-        'UPDATE $table SET quantity = $quantity WHERE $columnId = uId'
-    );
+        'UPDATE $table SET quantity = $quantity WHERE $columnId = uId');
   }
+
   deleteAll() async {
     Database db = await instance.database;
     return await db.rawDelete("delete from $table");

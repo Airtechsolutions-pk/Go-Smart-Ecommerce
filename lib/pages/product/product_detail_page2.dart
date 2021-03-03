@@ -21,17 +21,29 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
   String sizeselect;
   bool size;
   bool colors;
-  String selectedSize = "";
-  String selectedColor = "";
+  String selectedModifier = "";
+  String selectedModifierID = "";
+  String selectedModifierType = "";
+  String selectedModifierPrice = "";
+
+  String selectedVariant = "";
+  String selectedVariantID = "";
+  String selectedVariantType = "";
+  String selectedVariantPrice = "";
+
   var allRows;
   var items = {'Items': []};
   int cartNumber = 0;
   String priceGlobal;
   String _DeliveryCharges;
   String _TaxPercentTaxPercent;
+  double totalSendPrice;
+  double totalModPrice = 0.0;
+  double totalVarPrice = 0.0;
 
   @override
   void initState() {
+    totalSendPrice = widget.product['Price'];
     getGlobal();
     setState(() {
       getCartNumber();
@@ -56,7 +68,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
       //print(amount);
       //print(row);
     });
-    print(allRows.length);
+    // print(allRows.length);
 
     setState(() {
       cartNumber = allRows.length;
@@ -65,16 +77,16 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
 
   @override
   Widget build(BuildContext context) {
-    //print('//print kara ');
+    print('//print kara ');
     print(widget.product);
-    print(widget.product['SubCategoryID']);
+    // print(widget.product['SubCategoryID']);
 
-    print(searchArray.searchArrayData);
+    // print(searchArray.searchArrayData);
     var data = searchArray.searchArrayData
         .where((i) => i['SubCategoryID'] == widget.product['SubCategoryID'])
         .toList();
-    print(data);
-    print(data.length);
+    // print(data);
+    // print(data.length);
 
     double stackWidth = MediaQuery.of(context).size.width;
     double stackHeight = MediaQuery.of(context).size.height;
@@ -142,7 +154,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
                             );
                           },
                         )),
-                    SizedBox(height: 100.0),
+                    // SizedBox(height: 100.0),
                   ],
                 ),
               )
@@ -160,11 +172,21 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
           cart.id = widget.product['ID'];
           cart.title = widget.product['Name'];
           cart.image = widget.product['Image'];
-          cart.price = widget.product['Price'].toString();
-          cart.color = selectedColor;
-          cart.sizeselect = selectedSize;
+          cart.price = totalSendPrice.toString();
+          cart.variant = selectedVariant;
+          cart.modifier = selectedModifier;
+          cart.modifierID = int.tryParse(selectedModifierID) ?? 0;
+          cart.modifierPrice = selectedModifierPrice;
+          cart.modifierType = selectedModifierType;
+
+          cart.variantID = int.tryParse(selectedVariantID) ?? 0;
+          cart.variantPrice = selectedVariantPrice;
+          cart.variantType = selectedVariantType;
+
           cart.quantity = 1;
-          //print(cart);
+          print('cart data');
+
+          print(cart.modifier);
 
           final dbHelper = DatabaseHelper.instance;
 
@@ -342,18 +364,37 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
     List<Widget> textWidgetList = List<Widget>();
 
     if (widget.product['Modifiers'].length == 0) {
+      print('no');
+
       size = false;
     } else {
-      //print('yes');
+      print('yes');
       size = true;
       for (int i = 0; i < widget.product['Modifiers'].length; i++) {
         textWidgetList.add(
           GestureDetector(
               onTap: () {
+                totalModPrice = 0.0;
+
                 setState(() {
                   dateindex = i;
                   //print(dateindex);
-                  selectedSize = widget.product['Modifiers'][i]['Name'];
+                  colorindex = null;
+                  selectedModifier = widget.product['Modifiers'][i]['Name'];
+                  selectedModifierID =
+                      widget.product['Modifiers'][i]['ID'].toString();
+                  selectedModifierType =
+                      widget.product['Modifiers'][i]['Type'].toString();
+                  selectedModifierPrice =
+                      widget.product['Modifiers'][i]['Price'].toString();
+
+                  print(totalModPrice);
+                  print(totalVarPrice);
+                  totalModPrice = widget.product['Price'] +
+                      widget.product['Modifiers'][i]['Price'];
+                  print(totalModPrice);
+
+                  totalSendPrice = totalModPrice;
                 });
               },
               child: Padding(
@@ -392,33 +433,45 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
         colorWidgetList.add(
           GestureDetector(
               onTap: () {
+                totalVarPrice = 0.0;
+
                 setState(() {
                   colorindex = i;
                   //print(colorindex);
-                  selectedColor = widget.product['Variants'][i]['Name'];
+                  selectedVariant = widget.product['Variants'][i]['Name'];
+                  selectedVariantID =
+                      widget.product['Variants'][i]['ID'].toString();
+                  selectedVariantType =
+                      widget.product['Variants'][i]['Type'].toString();
+                  selectedVariantPrice =
+                      widget.product['Variants'][i]['Price'].toString();
+
+                  totalVarPrice = widget.product['Price'] +
+                      widget.product['Variants'][i]['Price'] +
+                      totalModPrice;
+                  totalSendPrice = totalVarPrice;
                 });
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 18),
                 child: AnimatedContainer(
                   duration: Duration(seconds: 1),
-                  width: stackWidth * 0.13,
+                  // width: stackWidth * 0.15,
                   height: stackWidth * 0.13,
                   decoration: BoxDecoration(
-                    color: Color(int.parse(
-                        "0xff${widget.product['Variants'][i]['Value'].replaceAll("#", "")}")),
-                    // color: Color(int.parse("0xff${widget.product['Variants'][i]['Value'].replaceAll("#", "")}")),
-
-                    //   color: Color(int.parse(0xff${widget.product['Variants'][i]['Value'].substring(1)})),
-
-                    border: Border.all(
-                        color: colorindex == i
-                            ? kPrimaryColor
-                            : kBackgroundLightColor,
-                        width: 5),
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                  ),
-                  child: null,
+                      color: colorindex == i ? kPrimaryColor : Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(40)),
+                      border: Border.all(color: kPrimaryColor)),
+                  child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Center(
+                          child: Text(
+                        widget.product['Variants'][i]['Name'],
+                        style: TextStyle(
+                            fontFamily: 'UbuntuRegular',
+                            color:
+                                colorindex == i ? Colors.white : kPrimaryColor),
+                      ))),
                 ),
               )),
         );
@@ -432,7 +485,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Text(
-              "$priceGlobal ${widget.product['Price']}",
+              "$priceGlobal ${totalSendPrice}",
               style: Theme.of(context)
                   .textTheme
                   .headline1
@@ -444,7 +497,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 18.0, vertical: 18),
                   child: Text(
-                    'Select Size',
+                    widget.product['Modifiers'][0]['Type'],
                     style: Theme.of(context).textTheme.headline3,
                   ).tr(),
                 )
@@ -459,7 +512,7 @@ class _ProductDetailPage2State extends State<ProductDetailPage2> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 18.0, vertical: 18),
                   child: Text(
-                    'Select Color',
+                    widget.product['Variants'][0]['Type'],
                     style: Theme.of(context).textTheme.headline3,
                   ).tr(),
                 )

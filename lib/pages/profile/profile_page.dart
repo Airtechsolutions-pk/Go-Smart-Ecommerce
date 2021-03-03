@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             }
                           },
                           leading: Icon(
-                            FlutterIcons.information_outline_mco,
+                            Icons.share_outlined,
                             color: Theme.of(context).primaryColor,
                           ),
                           title: Text('Share',

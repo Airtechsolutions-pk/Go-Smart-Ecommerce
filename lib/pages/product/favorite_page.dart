@@ -35,9 +35,11 @@ class _FavoritePageState extends State<FavoritePage> {
       );
 
       //print(items['Items']);
-      setState(() {
-        show = true;
-      });
+if(items['Items'].length >= 1){
+  setState(() {
+    show = true;
+  });
+}
     }
   }
 
@@ -73,22 +75,31 @@ class _FavoritePageState extends State<FavoritePage> {
                     );
                   },
                 )
-              : StaggeredGridView.countBuilder(
-                  itemCount: 4,
-                  crossAxisCount: 4,
-                  staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-                  mainAxisSpacing: 15.0,
-                  crossAxisSpacing: 15.0,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 18.0),
-                  itemBuilder: (context, index) {
-                    return Container(
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        child: SpinKitDoubleBounce(color: kPrimaryColor));
-                  },
-                )),
+              : Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/cart_empty.png',
+                  width: MediaQuery.of(context).size.width / 2,
+                ),
+                SizedBox(height: 15.0),
+                Text(
+                  'No Product in Wishlist',
+                  style: Theme.of(context).textTheme.headline1,
+                ).tr(),
+                SizedBox(height: 15.0),
+                Text(
+                  'Please add products in your wishlist. Happy Shopping  :)',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.subtitle1,
+                ).tr(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 5,
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

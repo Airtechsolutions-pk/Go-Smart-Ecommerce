@@ -1,6 +1,5 @@
 part of '../widgets.dart';
 
-
 class ProductCard2 extends StatefulWidget {
   final product;
   final bool isHorizontalList;
@@ -23,24 +22,21 @@ class _ProductCard2State extends State<ProductCard2> {
     getGlobal();
   }
 
-getGlobal() async {
-  final storage = new FlutterSecureStorage();
-   priceGlobal = await storage.read(key: "_Currency");
+  getGlobal() async {
+    final storage = new FlutterSecureStorage();
+    priceGlobal = await storage.read(key: "_Currency");
 
-   _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
-   _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
-   setState(() {
-
-   });
-}
+    _TaxPercentTaxPercent = await storage.read(key: "_TaxPercentTaxPercent");
+    _DeliveryCharges = await storage.read(key: "_DeliveryCharges");
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    if(WishList.wishlistArray.contains(widget.product['ID'])){
-       setState(() {
-         heart = true;
-       });
+    if (WishList.wishlistArray.contains(widget.product['ID'])) {
+      setState(() {
+        heart = true;
+      });
     }
 
     double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -51,8 +47,14 @@ getGlobal() async {
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
         onTap: () {
-          //print(widget.product);
-          Get.to(ProductDetailPage2(product: widget.product));
+          print(widget.product);
+
+          // Get.to(ProductDetailPage2(product: widget.product));
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProductDetailPage2(product: widget.product)),
+          );
         },
         child: Container(
           width: 150.0,
@@ -65,16 +67,22 @@ getGlobal() async {
                     borderRadius: BorderRadius.circular(12.0),
 
                     child: Container(
-                      color: kCardImageBCColor,
-
-                      child: CachedNetworkImage(
-                        imageUrl:
-                        widget.product['Image'],
-                        width: double.infinity,
-                        fit: BoxFit.fitWidth,
-                        height: Height * 0.2,
-                      ),
-                    ),
+                        color: kCardImageBCColor,
+                        // height: Height * 0.2,
+                        // width: double.infinity,
+                        // child: Image.network(
+                        //   widget.product['Image'].toString(),
+                        //   fit: BoxFit.fitWidth,
+                        // )
+                        child: CachedNetworkImage(
+                          imageUrl: widget.product['Image'] != null
+                              ? widget.product['Image'].toString()
+                              : 'https://via.placeholder.com/1000',
+                          width: double.infinity,
+                          fit: BoxFit.fitWidth,
+                          height: Height * 0.2,
+                        ),
+                        ),
                     // child: Image.asset(
                     //   product.image,
                     //   height: 150.0,
@@ -104,14 +112,11 @@ getGlobal() async {
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(width: 5.0),
-
                     ],
                   ),
-
                   SizedBox(height: 5.0),
                 ],
               ),
-
               Positioned(
                 right: 0.0,
                 top: 0.0,
@@ -124,22 +129,18 @@ getGlobal() async {
                   onPressed: () {
                     //print(widget.product['ID']);
 
-
-                    if(WishList.wishlistArray.contains(widget.product['ID'])){
-                      WishList.wishlistArray.removeWhere((item) => item == widget.product['ID']);
+                    if (WishList.wishlistArray.contains(widget.product['ID'])) {
+                      WishList.wishlistArray
+                          .removeWhere((item) => item == widget.product['ID']);
                       //print(WishList.wishlistArray);
                       setState(() {
                         heart = false;
-
                       });
-                    }
-                    else{
+                    } else {
                       WishList.wishlistArray.add(widget.product['ID']);
                       //print(WishList.wishlistArray);
                     }
-                    setState(() {
-
-                    });
+                    setState(() {});
                   },
                 ),
               ),

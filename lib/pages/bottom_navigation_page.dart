@@ -17,7 +17,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage>
 
   var currentTab = [
     HomePage(),
-    SearchPgExtra(),
+    allProducts(),
     CartPage(),
     FavoritePage(),
     ProfilePage(),
@@ -118,7 +118,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage>
                       ),
                       IconButton(
                           icon: Icon(
-                            FlutterIcons.search1_ant,
+                            Icons.dashboard_outlined,
                             color: _currentTab == 1
                                 ? kPrimaryColor
                                 : Colors.grey.shade400,

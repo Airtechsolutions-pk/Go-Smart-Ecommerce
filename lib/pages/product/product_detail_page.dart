@@ -9,9 +9,6 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-
-
-
   int selectedImage = 0;
 
   int dateindex;
@@ -24,9 +21,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   String sizeselect;
   bool size;
   bool colors;
-  String selectedSize = "";
-  String selectedColor = "";
-
+  String selectedModifier = "";
+  String selectedVariant = "";
 
   @override
   Widget build(BuildContext context) {
@@ -85,19 +81,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             cart.title = widget.product.title;
             cart.image = widget.product.image;
             cart.price = widget.product.normalPrice;
-            cart.color = selectedColor;
-            cart.sizeselect = selectedSize;
+            cart.variant = selectedVariant;
+            cart.modifier = selectedModifier;
             //print(cart);
-
 
             final dbHelper = DatabaseHelper.instance;
 
             final id = await dbHelper.insert(cart);
             // Model.createCustomer(map);
 
-          }
-
-          else {
+          } else {
             //print('not login');
             Get.offAll(SignInPage());
           }
@@ -254,7 +247,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   dateindex = i;
                   //print(dateindex);
                   //print(widget.product.sizes[i]);
-                  selectedSize = widget.product.sizes[i];
+                  selectedModifier = widget.product.sizes[i];
                 });
               },
               child: Padding(
@@ -297,7 +290,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   colorindex = i;
                   //print(widget.product.colors[i]);
                   //print(colorindex);
-                  selectedColor = widget.product.colors[i];
+                  selectedVariant = widget.product.colors[i];
                 });
               },
               child: Padding(

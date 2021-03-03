@@ -1,20 +1,17 @@
 part of '../pages.dart';
 
-
 class SplashPage extends StatefulWidget {
   @override
   _SplashPageState createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-
-
-
   @override
   void initState() {
     super.initState();
     dosomestuff();
   }
+
   Future<List> dosomestuff() async {
     print('run');
     http.Response res = await http.get(
@@ -29,21 +26,17 @@ class _SplashPageState extends State<SplashPage> {
       final storage = new FlutterSecureStorage();
       await storage.write(
           key: '_LocationID', value: map['LocationID'].toString());
-      await storage.write(
-          key: '_UserID', value: map['UserID'].toString());
+      await storage.write(key: '_UserID', value: map['UserID'].toString());
       await storage.write(
           key: '_TaxPercentTaxPercent', value: map['TaxPercent']);
       await storage.write(
           key: '_DeliveryCharges', value: map['DeliveryCharges']);
       await storage.write(key: '_Currency', value: map['Currency']);
-
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
-
-
     return AnimatedSplashScreen(
       backgroundColor: kPrimaryColor,
       splash: 'assets/icons/logo.png',
@@ -63,6 +56,7 @@ class SplashWelcomePage extends StatefulWidget {
 
 class _SplashWelcomePageState extends State<SplashWelcomePage> {
   String _LocationID;
+  String _UserID;
 
   void initState() {
     super.initState();
@@ -70,12 +64,16 @@ class _SplashWelcomePageState extends State<SplashWelcomePage> {
   }
 
   Future<List> dosomestuff() async {
-
     final storage = new FlutterSecureStorage();
     _LocationID = await storage.read(key: "_LocationID");
+    _UserID = await storage.read(key: "_UserID");
+    print('API MENU');
 
+    print(_LocationID);
+
+    print(_UserID);
     http.Response res = await http.get(
-      'http://retailapi.airtechsolutions.pk/api/menu/${_LocationID}',
+      'http://retailapi.airtechsolutions.pk/api/menu/${_LocationID}/${_UserID}',
     );
     globalArray.globalArrayData = res.body;
 
@@ -86,6 +84,7 @@ class _SplashWelcomePageState extends State<SplashWelcomePage> {
       startTime();
     }
   }
+
   startTime() {
     Timer(
       Duration(milliseconds: 1000),
@@ -109,8 +108,6 @@ class _SplashWelcomePageState extends State<SplashWelcomePage> {
       },
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
