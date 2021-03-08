@@ -49,17 +49,31 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool show = false;
   var items = {'Items': []};
   var featureProduct = [];
-String _LocationID;
+  String _LocationID;
   bool showFeat = false;
-
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String sendToken;
   var cat = {'Cat': []};
   @override
   void initState() {
     dosomestuff();
+    bannerApiHit(){
+      // http.Response res = await http.get(
+      //   'http://retailapi.airtechsolutions.pk/api/menu/${_LocationID}',
+      // );
+    }
+    Future.delayed(Duration.zero, () {
+      this.firebaseCloudMessagingListeners(context);
+    });
   }
+  void firebaseCloudMessagingListeners(BuildContext context) {
+    _firebaseMessaging.getToken().then((deviceToken) {
+      sendToken = deviceToken;
+      print("Firebase Device token: $sendToken");
 
+    });
+  }
   Future<List> dosomestuff() async {
-
     print(globalArray.globalArrayData);
     print('han karwa');
     final storage = new FlutterSecureStorage();
@@ -120,13 +134,12 @@ String _LocationID;
       cat['Cat'].addAll(map['Categories']);
       //print(cat);
 
-
       Timer(
         Duration(milliseconds: 1500),
-            ()  {      setState(() {
-              show = true;
-            });
-
+        () {
+          setState(() {
+            show = true;
+          });
         },
       );
     }
@@ -206,8 +219,8 @@ String _LocationID;
                               physics: BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 0),
-
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
                                   child: GestureDetector(
                                       onTap: () {
                                         //print(cat["Cat"][index]['Subcategories']);
@@ -220,15 +233,16 @@ String _LocationID;
                                         child: Column(
                                           children: <Widget>[
                                             ClipRRect(
-                                              borderRadius: BorderRadius.circular(100.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(100.0),
 
                                               child: Container(
                                                 color: kCardImageBCColor,
-                                                    width: 60,
+                                                width: 60,
                                                 height: 60,
                                                 child: CachedNetworkImage(
-                                                  imageUrl:
-                                                  cat["Cat"][index]['Image'],
+                                                  imageUrl: cat["Cat"][index]
+                                                      ['Image'],
                                                   width: double.infinity,
                                                   fit: BoxFit.fitWidth,
                                                   height: Height * 0.1,
@@ -289,22 +303,23 @@ String _LocationID;
                         ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 2.0),
               showFeat
                   ? Column(
                       children: [
                         SideInAnimation(
                           5,
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                                child: Text(
-                                  'New Products',
-                                  style: Theme.of(context).textTheme.headline3,
-                                ).tr(),
-                              ),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: Text(
+                                'New Products',
+                                style: Theme.of(context).textTheme.headline3,
+                              ).tr(),
                             ),
+                          ),
                         ),
                         SizedBox(height: 15.0),
                         show
@@ -344,7 +359,8 @@ String _LocationID;
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
                               child: Text(
                                 'Feature Product',
                                 style: Theme.of(context).textTheme.headline3,
@@ -571,12 +587,7 @@ String _LocationID;
           ),
           onPressed: navigateToSearchPg2,
         ),
-        IconButton(
-          icon: Icon(
-            FlutterIcons.notifications_none_mdi,
-          ),
-          onPressed: navigateToNotificationPage,
-        ),
+
       ],
     );
   }

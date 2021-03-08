@@ -162,6 +162,10 @@ class AddAddressPageState extends State<AddAddressPage> {
                       target: currentPostion, zoom: 16.0, tilt: 50),
                   myLocationEnabled: true,
                   onCameraMove: (CameraPosition position) {
+                    setState((){
+                      SendAddress = 'No Name | No Address';
+
+                    });
                     if (_markers.length > 0) {
                       print('current Location : ${position.target}');
                       // sendPostion = LatLng(latitude, longitude)
@@ -237,7 +241,8 @@ class AddAddressPageState extends State<AddAddressPage> {
                               context: context,
                               builder: (context) {
                                 return StatefulBuilder(builder:
-                                    (BuildContext context, StateSetter setState) {
+                                    (BuildContext context,
+                                        StateSetter setState) {
                                   return Container(
                                     color: Colors.white,
                                     height: MediaQuery.of(context).size.height *

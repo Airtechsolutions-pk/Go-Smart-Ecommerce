@@ -53,7 +53,7 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.165,
+                        height: MediaQuery.of(context).size.height * 0.13,
                         width: MediaQuery.of(context).size.width * 0.5,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
@@ -68,6 +68,7 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     '${e['ItemName'].toString()}',
@@ -76,15 +77,15 @@ class _OrderDetailPage2State extends State<OrderDetailPage2> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Spacer(),
-                                  Text(
+                                  SizedBox(height: 3),
+                                  e['OrderModifierDetails'][0]['ModifierName'] != null ? Text(
                                     '${e['OrderModifierDetails'][0]['ModifierName'].toString()} | ${e['OrderModifierDetails'][1]['VariantName'].toString()}',
                                     style:
                                         Theme.of(context).textTheme.subtitle2,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Spacer(),
+                                  ) : Container(),
+                                  SizedBox(height: 3),
                                   Row(children: [
                                     Text(
                                       "$priceGlobal ${e['Price'].toString()}",

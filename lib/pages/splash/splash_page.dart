@@ -32,20 +32,41 @@ class _SplashPageState extends State<SplashPage> {
       await storage.write(
           key: '_DeliveryCharges', value: map['DeliveryCharges']);
       await storage.write(key: '_Currency', value: map['Currency']);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SplashWelcomePage()),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      backgroundColor: kPrimaryColor,
-      splash: 'assets/icons/logo.png',
-      nextScreen: SplashWelcomePage(),
-      splashTransition: SplashTransition.fadeTransition,
-      pageTransitionType: PageTransitionType.fade,
-      duration: 1500,
-      animationDuration: Duration(milliseconds: 1500),
-    );
+    return Container(
+        color: kPrimaryColor,
+        child: Stack(children: [
+          Center(
+              child: Container(
+                  height: MediaQuery.of(context).size.height * 0.13,
+                  child: Image.asset('assets/icons/logo.png'))),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Container(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      child: Image.asset(
+                          'assets/images/Logo-Verticle-White-Square.png'))))
+        ]));
+    // return AnimatedSplashScreen(
+    //   backgroundColor: kPrimaryColor,
+    //   splash: 'assets/icons/logo.png',
+    //   nextScreen: SplashWelcomePage(),
+    //   splashTransition: SplashTransition.fadeTransition,
+    //   pageTransitionType: PageTransitionType.fade,
+    //   duration: 1500,
+    //   animationDuration: Duration(milliseconds: 1500),
+    // );
   }
 }
 

@@ -6,7 +6,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   bool checkLogin = false;
   String UserName = "";
   String UserEmail = "";
@@ -18,14 +17,13 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-
   check() async {
     final storage = new FlutterSecureStorage();
 
     String imi = await storage.read(key: "imei");
     //print(imi);
 
-    if(imi == "loginhuavaha"){
+    if (imi == "loginhuavaha") {
       UserEmail = await storage.read(key: "_userEmail");
       UserName = await storage.read(key: "_userName");
       //print(UserEmail);
@@ -35,128 +33,131 @@ class _ProfilePageState extends State<ProfilePage> {
         checkLogin = true;
       });
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     final themeProv = Provider.of<ThemeChangerProvider>(context);
     return Scaffold(
-      body: checkLogin ? Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 325.0,
-                child: Stack(
-                  children: [
-                    headerContent(
-                      context,
-                      image: 'assets/images/2ab08d7aa25abbd579f036c3c3acec47.png',
-                      username: checkLogin ? UserName.toString() : 'Jessica Veranda',
-                      email: checkLogin ? UserEmail.toString() : 'jscvrnd19@gmail.com',
-                    ),
-                    primaryCard(context),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                elevation: 8.0,
-                child: Center(
+        body: checkLogin
+            ? Container(
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      buildOrder(context),
-
-                      buildFavorite(context),
-                      buildTheme(context, themeProv),
-                      buildAbout(context),
-                      SideInAnimation(
-                        7,
-                        child: ListTile(
-                          onTap: () async{
-                            const url = 'https://play.google.com/store/apps/details?id=com.airtechecommerce.AirEcom';
-                            if (await canLaunch(url)) {
-                            await launch(url);
-                            } else {
-                            throw 'Could not launch $url';
-                            }
-                          },
-                          leading: Icon(
-                            Icons.share_outlined,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          title: Text('Share',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  .copyWith(fontSize: 14.0))
-                              .tr(),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
+                      Container(
+                        width: double.infinity,
+                        height: 325.0,
+                        child: Stack(
+                          children: [
+                            headerContent(
+                              context,
+                              image:
+                                  'assets/images/2ab08d7aa25abbd579f036c3c3acec47.png',
+                              username: checkLogin
+                                  ? UserName.toString()
+                                  : 'Jessica Veranda',
+                              email: checkLogin
+                                  ? UserEmail.toString()
+                                  : 'jscvrnd19@gmail.com',
+                            ),
+                            primaryCard(context),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 20.0),
+                        elevation: 8.0,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              // buildOrder(context),
+                              buildFavorite(context),
+                              buildTheme(context, themeProv),
+                              buildAbout(context),
+                              SideInAnimation(
+                                7,
+                                child: ListTile(
+                                  onTap: () async {
+                                    const url =
+                                        'https://play.google.com/store/apps/details?id=com.airtechecommerce.AirEcom';
+                                    if (await canLaunch(url)) {
+                                      await launch(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  },
+                                  leading: Icon(
+                                    Icons.share_outlined,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  title: Text('Share',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .copyWith(fontSize: 14.0))
+                                      .tr(),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios,
+                                  ),
+                                ),
+                              ),
+                              buildSignOut(context),
+                            ],
                           ),
                         ),
                       ),
-                      buildSignOut(context),
+                      SizedBox(height: 50.0),
                     ],
                   ),
                 ),
-              ),
-              SizedBox(height: 50.0),
-            ],
-          ),
-        ),
-      ) : Center(
-        child: Container(
-            child: Column(
-               // mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 150.0),
-
-                  Image.asset(
-                    'assets/images/undraw_Login_re_4vu2.png',
-                    width: MediaQuery.of(context).size.width / 2,
-                  ),
-                  SizedBox(height: 15.0),
-                  Text(
-                    'You are not Login ',
-                    style: Theme.of(context).textTheme.headline1,
-                  ).tr(),
-                  SizedBox(height: 15.0),
-                  Text(
-                    'Please Login to proceed more. Happy Shopping  :)',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ).tr(),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: 85.0,
-                    height: 50.0,
-                    child: RaisedButton(
-                      color: Theme.of(context).primaryColor,
-                      elevation: 0.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+              )
+            : Center(
+                child: Container(
+                    child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                      SizedBox(height: 150.0),
+                      Image.asset(
+                        'assets/images/undraw_Login_re_4vu2.png',
+                        width: MediaQuery.of(context).size.width / 2,
                       ),
-                      child: Text(
-                        'LOGIN',
-                        style: Theme.of(context).textTheme.button,
+                      SizedBox(height: 15.0),
+                      Text(
+                        'You are not Login ',
+                        style: Theme.of(context).textTheme.headline1,
                       ).tr(),
-                      onPressed: () {
-                        Get.offAll(SignInPage());
-                      },
-                    ),
-                  ),
-                ])),
-      )
-    );
+                      SizedBox(height: 15.0),
+                      Text(
+                        'Please Login to proceed more. Happy Shopping  :)',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ).tr(),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: 85.0,
+                        height: 50.0,
+                        child: RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          elevation: 0.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Text(
+                            'LOGIN',
+                            style: Theme.of(context).textTheme.button,
+                          ).tr(),
+                          onPressed: () {
+                            Get.offAll(SignInPage());
+                          },
+                        ),
+                      ),
+                    ])),
+              ));
   }
 
   SideInAnimation buildSignOut(BuildContext context) {
@@ -330,8 +331,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-
-
   Future signOutDialog(BuildContext context) {
     return showDialog(
       context: context,
@@ -358,7 +357,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 50.0,
               child: RaisedButtonWidget(
                 title: 'profile.yes',
-                onPressed: () async{
+                onPressed: () async {
                   final storage = new FlutterSecureStorage();
 
                   await storage.deleteAll();
@@ -421,26 +420,47 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 SideInAnimation(
-                  2,
+                  3,
                   child: ListTile(
                     onTap: () {
-                      Get.to(ProfileAddressPage());
+                      Get.to(OrderPage());
                     },
                     leading: Icon(
-                      FlutterIcons.address_ent,
+                      FlutterIcons.first_order_alt_faw5d,
                       color: Theme.of(context).primaryColor,
                     ),
-                    title: Text('profile.address',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                .copyWith(fontSize: 14.0))
+                    title: Text('profile.order',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 14.0))
                         .tr(),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                     ),
                   ),
-                ),
+                )
+                // SideInAnimation(
+                //   2,
+                //   child: ListTile(
+                //     onTap: () {
+                //       Get.to(ProfileAddressPage());
+                //     },
+                //     leading: Icon(
+                //       FlutterIcons.address_ent,
+                //       color: Theme.of(context).primaryColor,
+                //     ),
+                //     title: Text('profile.address',
+                //             style: Theme.of(context)
+                //                 .textTheme
+                //                 .bodyText2
+                //                 .copyWith(fontSize: 14.0))
+                //         .tr(),
+                //     trailing: Icon(
+                //       Icons.arrow_forward_ios,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

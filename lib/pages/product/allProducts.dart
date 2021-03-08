@@ -103,12 +103,12 @@ class _allProductsState extends State<allProducts> {
               ),
               onPressed: navigateToSearchPg2,
             ),
-            IconButton(
-              icon: Icon(
-                FlutterIcons.notifications_none_mdi,
-              ),
-              onPressed: navigateToNotificationPage,
-            ),
+            // IconButton(
+            //   icon: Icon(
+            //     FlutterIcons.notifications_none_mdi,
+            //   ),
+            //   onPressed: navigateToNotificationPage,
+            // ),
           ],
         ),
         body: SingleChildScrollView(

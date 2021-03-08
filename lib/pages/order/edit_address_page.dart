@@ -172,6 +172,10 @@ class _EditAddressPageState extends State<EditAddressPage> {
                       target: currentPostion, zoom: 16.0, tilt: 50),
                   myLocationEnabled: true,
                   onCameraMove: (CameraPosition position) {
+                    setState((){
+                      SendAddress = 'No Name | No Address';
+
+                    });
                     if (_markers.length > 0) {
                       print('current Location : ${position.target}');
                       // sendPostion = LatLng(latitude, longitude)
