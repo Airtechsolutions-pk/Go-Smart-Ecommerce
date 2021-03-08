@@ -8,7 +8,7 @@ class AddAddressPage extends StatefulWidget {
 class AddAddressPageState extends State<AddAddressPage> {
   Completer<GoogleMapController> _controller = Completer();
   final _textcontroller = TextEditingController();
-
+  int addressType = 0;
   LatLng currentPostion;
   bool showMap = false;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
@@ -26,7 +26,6 @@ class AddAddressPageState extends State<AddAddressPage> {
   @override
   void initState() {
     _getUserLocation();
-
   }
 
   void _onMapCreated(GoogleMapController controller) async {
@@ -238,7 +237,7 @@ class AddAddressPageState extends State<AddAddressPage> {
                               context: context,
                               builder: (context) {
                                 return StatefulBuilder(builder:
-                                    (BuildContext context, StateSetter state) {
+                                    (BuildContext context, StateSetter setState) {
                                   return Container(
                                     color: Colors.white,
                                     height: MediaQuery.of(context).size.height *
@@ -453,7 +452,197 @@ class AddAddressPageState extends State<AddAddressPage> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 25.0),
+                                            SizedBox(height: 5.0),
+                                            Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        addressType = 0;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                        height: 30,
+                                                        width: 80,
+                                                        margin: const EdgeInsets
+                                                            .all(15.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(3.0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        7),
+                                                            border: Border.all(
+                                                                color: addressType ==
+                                                                        0
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey)),
+                                                        child: Center(
+                                                            child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: <Widget>[
+                                                            Icon(
+                                                                Icons
+                                                                    .home_outlined,
+                                                                color: addressType ==
+                                                                        0
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey,
+                                                                size: 16),
+                                                            SizedBox(width: 2),
+                                                            Text(
+                                                              'Home',
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: addressType ==
+                                                                        0
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ))),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        addressType = 1;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                        height: 30,
+                                                        width: 80,
+                                                        margin: const EdgeInsets
+                                                            .all(15.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(3.0),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        7),
+                                                            border: Border.all(
+                                                                color: addressType ==
+                                                                        1
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey)),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: <Widget>[
+                                                            Icon(
+                                                                Icons
+                                                                    .next_week_outlined,
+                                                                color: addressType ==
+                                                                        1
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey,
+                                                                size: 16),
+                                                            SizedBox(width: 2),
+                                                            Text(
+                                                              'Work',
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: addressType ==
+                                                                        1
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          addressType = 2;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                          height: 30,
+                                                          width: 80,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(15.0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(3.0),
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          7),
+                                                              border: Border.all(
+                                                                  color: addressType ==
+                                                                          2
+                                                                      ? kPrimaryColor
+                                                                      : Colors
+                                                                          .grey)),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              Icon(
+                                                                  Icons
+                                                                      .location_on_outlined,
+                                                                  color: addressType ==
+                                                                          2
+                                                                      ? kPrimaryColor
+                                                                      : Colors
+                                                                          .grey,
+                                                                  size: 16),
+                                                              SizedBox(
+                                                                  width: 2),
+                                                              Text(
+                                                                'Other',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 13,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: addressType ==
+                                                                          2
+                                                                      ? kPrimaryColor
+                                                                      : Colors
+                                                                          .grey,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ))),
+                                                ]),
                                             FadeInAnimation(
                                               6,
                                               child: RaisedButtonWidget(

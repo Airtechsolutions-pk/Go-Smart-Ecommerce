@@ -551,7 +551,7 @@ class _CartPageState extends State<CartPage> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    '${items['Items'][index]['variant']} | ${items['Items'][index]['modifier']}',
+                                    items['Items'][index]['variant'] == '' ? '' : '${items['Items'][index]['variant']} | ${items['Items'][index]['modifier']}',
                                     style:
                                         Theme.of(context).textTheme.subtitle1,
                                   ),

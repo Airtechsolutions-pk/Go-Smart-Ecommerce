@@ -20,8 +20,9 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
   var Reitems = {'Items': []};
 
   var filterItems = {'Items': []};
-
+  int sortIndex;
   int dateindex;
+  int filterSortIndex;
   bool showNotAvail = false;
   RangeValues _currentRangeValues = const RangeValues(0, 10000);
   TextEditingController filterFirstvalue = TextEditingController();
@@ -398,13 +399,18 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                   children: [
                                                     GestureDetector(
                                                         onTap: () {
-                                                          items['Items'].sort(
-                                                              (a, b) => b[
-                                                                      'Name']
-                                                                  .compareTo(a[
-                                                                      'Name']));
-                                                          print('tap');
-                                                          setState(() {});
+                                                          // items['Items'].sort(
+                                                          //     (a, b) => b[
+                                                          //             'Name']
+                                                          //         .compareTo(a[
+                                                          //             'Name']));
+                                                          // print('tap');
+                                                          state(() {
+                                                            filterSortIndex = 0;
+                                                          });
+                                                          // setState((){
+                                                          //
+                                                          // });
                                                         },
                                                         child: Container(
                                                             decoration: BoxDecoration(
@@ -414,7 +420,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                                             3.0),
                                                                 border: Border.all(
                                                                     color:
-                                                                        kPrimaryColor)),
+                                                                    filterSortIndex == 0 ? kPrimaryColor : Colors.grey)),
                                                             height: 30,
                                                             width: 60,
                                                             child: Center(
@@ -429,12 +435,17 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                     SizedBox(width: 10),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        items['Items'].sort(
-                                                            (a, b) => a['Name']
-                                                                .compareTo(
-                                                                    b['Name']));
-                                                        print('tap');
-                                                        setState(() {});
+                                                        // items['Items'].sort(
+                                                        //     (a, b) => a['Name']
+                                                        //         .compareTo(
+                                                        //             b['Name']));
+                                                        // print('tap');
+                                                        state(() {
+                                                          filterSortIndex = 1;
+                                                        });
+                                                        // setState((){
+                                                        //
+                                                        // });
                                                       },
                                                       child: Container(
                                                           decoration: BoxDecoration(
@@ -444,7 +455,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                                           3.0),
                                                               border: Border.all(
                                                                   color:
-                                                                      kPrimaryColor)),
+                                                                  filterSortIndex == 1 ? kPrimaryColor : Colors.grey)),
                                                           height: 30,
                                                           width: 60,
                                                           child: Center(
@@ -460,12 +471,17 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                     SizedBox(width: 10),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        items['Items'].sort(
-                                                            (a, b) => a['Price']
-                                                                .compareTo(b[
-                                                                    'Price']));
-                                                        print('tap');
-                                                        setState(() {});
+                                                        // items['Items'].sort(
+                                                        //     (a, b) => a['Price']
+                                                        //         .compareTo(b[
+                                                        //             'Price']));
+                                                        // print('tap');
+                                                        state(() {
+                                                          filterSortIndex = 2;
+                                                        });
+                                                        // setState((){
+                                                        //
+                                                        // });
                                                       },
                                                       child: Container(
                                                           decoration: BoxDecoration(
@@ -475,7 +491,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                                           3.0),
                                                               border: Border.all(
                                                                   color:
-                                                                      kPrimaryColor)),
+                                                                  filterSortIndex == 2 ? kPrimaryColor : Colors.grey)),
                                                           height: 30,
                                                           width: 60,
                                                           child: Center(
@@ -491,12 +507,17 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                     SizedBox(width: 10),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        items['Items'].sort(
-                                                            (a, b) => b['Price']
-                                                                .compareTo(a[
-                                                                    'Price']));
-                                                        print('tap');
-                                                        setState(() {});
+                                                        // items['Items'].sort(
+                                                        //     (a, b) => b['Price']
+                                                        //         .compareTo(a[
+                                                        //             'Price']));
+                                                        // print('tap');
+                                                        state(() {
+                                                          filterSortIndex = 3;
+                                                        });
+                                                        // setState((){
+                                                        //
+                                                        // });
                                                       },
                                                       child: Container(
                                                           decoration: BoxDecoration(
@@ -506,7 +527,7 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                                           3.0),
                                                               border: Border.all(
                                                                   color:
-                                                                      kPrimaryColor)),
+                                                                  filterSortIndex == 3 ? kPrimaryColor : Colors.grey)),
                                                           height: 30,
                                                           width: 60,
                                                           child: Center(
@@ -589,6 +610,36 @@ class _BrowserCategoryPage2State extends State<BrowserCategoryPage2> {
                                                     }
 
                                                     print(items['Items']);
+
+                                                    if(filterSortIndex == 0){
+                                                      items['Items'].sort(
+                                                              (a, b) => b[
+                                                          'Name']
+                                                              .compareTo(a[
+                                                          'Name']));
+                                                      print('tap');
+                                                    }
+                                                    if(filterSortIndex == 1){
+                                                      items['Items'].sort(
+                                                              (a, b) => a['Name']
+                                                              .compareTo(
+                                                              b['Name']));
+                                                      print('tap');
+                                                    }
+                                                    if(filterSortIndex == 2){
+                                                      items['Items'].sort(
+                                                              (a, b) => a['Price']
+                                                              .compareTo(b[
+                                                          'Price']));
+                                                      print('tap');
+                                                    }
+                                                    if(filterSortIndex == 3){
+                                                      items['Items'].sort(
+                                                              (a, b) => b['Price']
+                                                              .compareTo(a[
+                                                          'Price']));
+                                                      print('tap');
+                                                    }
                                                     setState(() {});
 
                                                     Navigator.of(context).pop();

@@ -43,7 +43,7 @@ class _SplashPageState extends State<SplashPage> {
       nextScreen: SplashWelcomePage(),
       splashTransition: SplashTransition.fadeTransition,
       pageTransitionType: PageTransitionType.fade,
-      duration: 1000,
+      duration: 1500,
       animationDuration: Duration(milliseconds: 1500),
     );
   }
