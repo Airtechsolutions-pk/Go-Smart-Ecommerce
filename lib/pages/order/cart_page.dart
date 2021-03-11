@@ -229,7 +229,7 @@ class _CartPageState extends State<CartPage> {
                                         builder: (context) {
                                           return Container(
                                               padding: EdgeInsets.all(8),
-                                              height: 150,
+                                              height: 275,
                                               alignment: Alignment.center,
                                               child: Column(children: [
                                                 GestureDetector(
@@ -263,6 +263,42 @@ class _CartPageState extends State<CartPage> {
                                                       setState(() {
                                                         PaymentText =
                                                             'Bank Transfer';
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }),
+                                                GestureDetector(
+                                                    child: Row(children: [
+                                                      IconButton(
+                                                          icon: Icon(
+                                                              Icons
+                                                                  .monetization_on,
+                                                              color:
+                                                                  kPrimaryColor)),
+                                                      Text('Benefit Pay')
+                                                    ]),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        PaymentText =
+                                                            'Benefit Pay';
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }),
+                                                GestureDetector(
+                                                    child: Row(children: [
+                                                      IconButton(
+                                                          icon: Icon(
+                                                              Icons
+                                                                  .card_membership_outlined,
+                                                              color:
+                                                                  kPrimaryColor)),
+                                                      Text('Credit Card')
+                                                    ]),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        PaymentText =
+                                                            'Credit Card';
                                                       });
                                                       Navigator.of(context)
                                                           .pop();
@@ -551,7 +587,9 @@ class _CartPageState extends State<CartPage> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    items['Items'][index]['variant'] == '' ? '' : '${items['Items'][index]['variant']} | ${items['Items'][index]['modifier']}',
+                                    items['Items'][index]['variant'] == ''
+                                        ? ''
+                                        : '${items['Items'][index]['variant']} | ${items['Items'][index]['modifier']}',
                                     style:
                                         Theme.of(context).textTheme.subtitle1,
                                   ),

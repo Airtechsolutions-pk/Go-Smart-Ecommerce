@@ -12,6 +12,7 @@ class _allProductsState extends State<allProducts> {
 
   var cat = {'Cat': []};
   int selectedIndex = 0;
+  int selectedCatIndex = 0;
 
   bool show = false;
   @override
@@ -115,12 +116,11 @@ class _allProductsState extends State<allProducts> {
           child: Column(children: [
             Column(
               children: [
-
                 show
                     ? SideInAnimation(2,
                         child: Container(
                           width: double.infinity,
-                          height: Height * 0.13,
+                          height: Height * 0.135,
                           child: ListView.builder(
                             itemCount: cat["Cat"].length,
                             scrollDirection: Axis.horizontal,
@@ -132,41 +132,40 @@ class _allProductsState extends State<allProducts> {
                                     const EdgeInsets.symmetric(horizontal: 0),
                                 child: GestureDetector(
                                     onTap: () {
-                                      //print(cat["Cat"][index]['Subcategories']);
-                                      // Get.to(BrowserCategoryPage2(
-                                      //     subCategory: cat["Cat"][index]
-                                      //     ['Subcategories']));
+
                                       items = {'Items': []};
                                       items['Items'].addAll(
                                           cat["Cat"][index]['Subcategories']);
+                                      setState(() {
+                                        selectedCatIndex = index;
+                                        print(selectedCatIndex);
+                                      });
                                       setState(() {});
                                     },
                                     child: Container(
                                       width: 80.0,
                                       child: Column(
                                         children: <Widget>[
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100.0),
-
-                                            child: Container(
-                                              color: kCardImageBCColor,
-                                              width: 60,
-                                              height: 60,
-                                              child: CachedNetworkImage(
-                                                imageUrl: cat["Cat"][index]
-                                                    ['Image'],
-                                                width: double.infinity,
-                                                fit: BoxFit.fitWidth,
-                                                height: Height * 0.1,
+                                          Container(
+                                            width: 60.0,
+                                            height: 60.0,
+                                            decoration: new BoxDecoration(
+                                              color: kPrimaryColor,
+                                              image: new DecorationImage(
+                                                image: new NetworkImage(
+                                                    cat["Cat"][index]['Image']),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: new BorderRadius
+                                                      .all(
+                                                  new Radius.circular(50.0)),
+                                              border: new Border.all(
+                                                color: selectedCatIndex == index
+                                                    ? kPrimaryColor
+                                                    : kBackgroundLightColor,
+                                                width: 2.0,
                                               ),
                                             ),
-                                            // child: Image.asset(
-                                            //   product.image,
-                                            //   height: 150.0,
-                                            //   fit: BoxFit.cover,
-                                            //   width: double.infinity,
-                                            // ),
                                           ),
                                           SizedBox(height: 12.0),
                                           Text(
@@ -222,9 +221,8 @@ class _allProductsState extends State<allProducts> {
                         child: Container(
                           width: double.infinity,
                           color: Color(0xfff7f7f7),
-                          height: Height * 0.05,
+                          height: Height * 0.06,
                           child: ListView.builder(
-
                             itemCount: items['Items'].length,
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
@@ -244,8 +242,8 @@ class _allProductsState extends State<allProducts> {
                                           selectedIndex = index;
                                           print(index);
                                           proDitems = {'Items': []};
-                                          proDitems['Items'].addAll(items['Items'][index]['Items']);
-
+                                          proDitems['Items'].addAll(
+                                              items['Items'][index]['Items']);
                                         });
                                       },
                                       child: Padding(
@@ -257,9 +255,9 @@ class _allProductsState extends State<allProducts> {
                                                 child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-
-                                                  children: <Widget>[
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
                                                 // SizedBox(height: 12.0),
                                                 Text(
                                                   show
@@ -268,36 +266,38 @@ class _allProductsState extends State<allProducts> {
                                                       : 'Loading',
                                                   textAlign: TextAlign.center,
                                                   maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: GoogleFonts.poppins(
-                                                    color: selectedIndex == index
+                                                    color: selectedIndex ==
+                                                            index
                                                         ? kPrimaryColor
                                                         : kSecondaryDarkFontColor,
                                                     fontSize:
                                                         selectedIndex == index
-                                                            ? 13.0
-                                                            : 12.0,
+                                                            ? 14.0
+                                                            : 13.0,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ).tr(),
                                                 selectedIndex == index
                                                     ? Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
-                                                                top: 3),
+                                                            const EdgeInsets
+                                                                .only(top: 3),
                                                         child: Container(
-                                                          width: 8,
-                                                          height: 8,
+                                                          width: 9,
+                                                          height: 9,
                                                           decoration: BoxDecoration(
-                                                              shape:
-                                                                  BoxShape.circle,
+                                                              shape: BoxShape
+                                                                  .circle,
                                                               color:
                                                                   kPrimaryColor),
                                                         ))
                                                     : Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
-                                                                top: 3),
+                                                            const EdgeInsets
+                                                                .only(top: 3),
                                                         child: Container(
                                                           width: 8,
                                                           height: 8,
@@ -330,7 +330,6 @@ class _allProductsState extends State<allProducts> {
               ],
             ),
             SizedBox(height: 15.0),
-
             show
                 ? StaggeredGridView.countBuilder(
                     itemCount: show ? proDitems['Items'].length : 0,
