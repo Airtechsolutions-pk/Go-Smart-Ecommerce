@@ -103,7 +103,7 @@ class _CartPageState extends State<CartPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    tr('order.items') + ' (3)',
+                                    tr('order.items'),
                                     style:
                                         Theme.of(context).textTheme.subtitle2,
                                   ),

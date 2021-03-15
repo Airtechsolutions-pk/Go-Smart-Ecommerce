@@ -259,83 +259,150 @@ class _AddressPageState extends State<AddressPage> {
                                         print(addressSelected);
                                       });
                                     },
-                                    child: Stack(
-                                      children:[
-                                        Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.all(15.0),
-                                          margin: EdgeInsets.only(bottom: 15.0),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12.0),
-                                            border: Border.all(
-                                              color: dateindex == index
-                                                  ? Theme.of(context).primaryColor
-                                                  : Theme.of(context).accentColor,
-                                              width: dateindex == index ? 2.0 : 1.0,
-                                            ),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  showAddress
-                                                      ? address['Address'][index]
-                                                  ['Address']
-                                                      : '...',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline4),
-                                              SizedBox(height: 8.0),
-                                              Text(
-                                                  showAddress
-                                                      ? address['Address'][index]
-                                                  ['StreetName']
-                                                      : '...',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5),
-
-                                            ],
+                                    child: Stack(children: [
+                                      Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.all(15.0),
+                                        margin: EdgeInsets.only(bottom: 15.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                          border: Border.all(
+                                            color: dateindex == index
+                                                ? Theme.of(context).primaryColor
+                                                : Theme.of(context).accentColor,
+                                            width:
+                                                dateindex == index ? 2.0 : 1.0,
                                           ),
                                         ),
-                                        Positioned(
-                                          right: 5.0,
-                                          bottom: 0.0,
-                                          child:
-                                          Row(
-                                            children: [
-                                              ClipOval(
-                                                child: Material(
-                                                  color: kPrimaryColor, // button color
-                                                  child: InkWell(
-                                                    splashColor: Colors.red, // inkwell color
-                                                    child: SizedBox(width: 30, height: 30, child: Icon(Icons.edit_outlined, color: Colors.white, size: 18)),
-                                                    onTap: () {
-                                                      Get.to(EditAddressPage(
-                                                          address: address['Address']
-                                                          [index]));
-                                                    },
-                                                  ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                showAddress
+                                                    ? address['Address'][index]
+                                                        ['Address']
+                                                    : '...',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline4),
+                                            SizedBox(height: 8.0),
+                                            Text(
+                                                showAddress
+                                                    ? address['Address'][index]
+                                                        ['StreetName']
+                                                    : '...',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline5),
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 5.0,
+                                        bottom: 0.0,
+                                        child: Row(
+                                          children: [
+                                            ClipOval(
+                                              child: Material(
+                                                color:
+                                                    kPrimaryColor, // button color
+                                                child: InkWell(
+                                                  splashColor: Colors
+                                                      .red, // inkwell color
+                                                  child: SizedBox(
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: Icon(
+                                                          Icons.edit_outlined,
+                                                          color: Colors.white,
+                                                          size: 18)),
+                                                  onTap: () {
+                                                    Get.to(EditAddressPage(
+                                                        address:
+                                                            address['Address']
+                                                                [index]));
+                                                  },
                                                 ),
                                               ),
-                                              SizedBox(width: 5.0),
-                                              ClipOval(
-                                                child: Material(
-                                                  color: kErrorLightColor, // button color
-                                                  child: InkWell(
-                                                    splashColor: Colors.red, // inkwell color
-                                                    child: SizedBox(width: 30, height: 30, child: Icon(Icons.delete_outline,  color: Colors.white, size: 18)),
-                                                    onTap: () {},
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                            SizedBox(width: 5.0),
+                                            ClipOval(
+                                              child: Material(
+                                                color:
+                                                    kErrorLightColor, // button color
+                                                child: InkWell(
+                                                  splashColor: Colors
+                                                      .red, // inkwell color
+                                                  child: SizedBox(
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: Icon(
+                                                          Icons.delete_outline,
+                                                          color: Colors.white,
+                                                          size: 18)),
+                                                  onTap: () async {
+                                                    print(address['Address']);
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible: false,
+                                                        builder: (BuildContext context) {
+                                                          return Center(
+                                                              child: const SpinKitWave(
+                                                                  color: kPrimaryColor, type: SpinKitWaveType.center));
+                                                        });
+                                                    Map<String, dynamic> body =
 
-                                        )
-                                      ]
-                                    ),
+                                                          {
+                                                            "CustomerAddressID": address[
+                                                            'Address'][0]
+                                                            ['CustomerAddressID'],
+                                                            "Address": "delete",
+                                                            "NickName": "delete",
+                                                            "Latitude": "delete",
+                                                            "Longitude": "delete",
+                                                            "StatusID": 3,
+                                                            "StreetName": "delete",
+                                                            "CustomerID": address[
+                                                            'Address'][0]
+                                                            ['CustomerID'],
+                                                            "Country": "delete",
+                                                            "ContactNo": "delete"
+
+
+                                                    };
+                                                    String jsonBody =
+                                                        json.encode(body);
+                                                    final headers = {
+                                                      'Content-Type':
+                                                          'application/json'
+                                                    };
+
+                                                    print(jsonBody);
+                                                    http.Response res =
+                                                        await http.post(
+                                                      'http://retailapi.airtechsolutions.pk/api/customer/address/addorupdate',
+                                                      headers: headers,
+                                                      body: jsonBody,
+                                                    );
+                                                    var data = json.decode(
+                                                        res.body.toString());
+                                                    print(data);
+                                                    if (data['description'] == "Your addresses deleted successfully.") {
+                                                      Navigator.pop(context);
+                                                      Get.to(AddressPage());
+                                                    } else {
+                                                      Navigator.pop(context);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]),
                                   ),
                                 ),
                               );

@@ -45,6 +45,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  var bannerapiList = [];
+  bool showBanner = false;
+
   var fetchedList = [];
   bool show = false;
   var items = {'Items': []};
@@ -54,10 +57,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   String sendToken;
   var cat = {'Cat': []};
+  List<Widget> imageApiSlider;
   @override
   void initState() {
     dosomestuff();
-    bannerApiHit(){
+    banner();
+    bannerApiHit() {
       // http.Response res = await http.get(
       //   'http://retailapi.airtechsolutions.pk/api/menu/${_LocationID}',
       // );
@@ -66,13 +71,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       this.firebaseCloudMessagingListeners(context);
     });
   }
+
   void firebaseCloudMessagingListeners(BuildContext context) {
     _firebaseMessaging.getToken().then((deviceToken) {
       sendToken = deviceToken;
       print("Firebase Device token: $sendToken");
-
     });
   }
+
   Future<List> dosomestuff() async {
     print(globalArray.globalArrayData);
     print('han karwa');
@@ -135,13 +141,55 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       //print(cat);
 
       Timer(
-        Duration(milliseconds: 1500),
+        Duration(milliseconds: 1000),
         () {
           setState(() {
             show = true;
           });
         },
       );
+    }
+  }
+
+  Future<List> banner() async {
+    print(globalArray.globalArrayData);
+    print('han karwa');
+    final storage = new FlutterSecureStorage();
+    _LocationID = await storage.read(key: "_LocationID");
+
+    http.Response res = await http.get(
+      'http://retailapi.airtechsolutions.pk/api/banners/all/0',
+    );
+
+    Map<String, dynamic> map = json.decode(res.body);
+
+    if (map['description'] == "Success") {
+      map['Banners'].forEach((category) {
+        print('banner');
+        bannerapiList.add(category['Image'].toString());
+        print(category);
+        print(category['Image']);
+      });
+
+      print(bannerapiList);
+      imageApiSlider = bannerapiList
+          .map((item) => ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                child: Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: item,
+                      fit: BoxFit.cover,
+                    )
+                  ),
+                ),
+              ))
+          .toList();
+      setState(() {
+        showBanner = true;
+      });
     }
   }
 
@@ -190,7 +238,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              buildSwiper(context),
+              showBanner ? buildSwiper(context) : Container(),
+              SizedBox(height: 10),
               Column(
                 children: [
                   SideInAnimation(
@@ -558,17 +607,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   SideInAnimation buildSwiper(BuildContext context) {
     return SideInAnimation(1,
         child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.circular(10),
           child: Container(
             width: double.infinity,
             child: CarouselSlider(
               options: CarouselOptions(
                 autoPlay: true,
-                aspectRatio: 2,
-                enlargeCenterPage: false,
+                aspectRatio: 2.4,
+                enlargeCenterPage: true,
                 enlargeStrategy: CenterPageEnlargeStrategy.height,
               ),
-              items: imageSliders,
+              items: showBanner ? imageApiSlider : null,
             ),
           ),
         ));
@@ -587,7 +636,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           onPressed: navigateToSearchPg2,
         ),
-
       ],
     );
   }
